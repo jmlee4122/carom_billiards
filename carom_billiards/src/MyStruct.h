@@ -23,10 +23,3 @@ struct Model {
 	Vertex* normals;
 	size_t normal_count;  // 노말 개수 추가
 };
-
-// [최적화] 렌더링용 구조체
-struct RenderChunk {
-	float x, z;      // 중심 좌표
-	float w, d;      // 가로(Width), 세로(Depth) 크기
-	int height;      // 층수
-};

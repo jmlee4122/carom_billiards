@@ -215,12 +215,19 @@ char* filetobuf(const char* file)
 	buf[length] = 0; // Null terminator
 	return buf; // Return the buffer
 }
-void make_vertexShaders()
+void make_vertexShaders(const char* filename)
 {
 	GLchar* vertexSource;
 	//--- 버텍스 세이더 읽어 저장하고 컴파일 하기
 	//--- filetobuf: 사용자정의 함수로 텍스트를 읽어서 문자열에 저장하는 함수
-	vertexSource = filetobuf("vertex.glsl");
+	vertexSource = filetobuf(filename);
+
+	if (vertexSource == NULL) {
+		std::cerr << "[치명적 오류] 쉐이더 파일을 찾을 수 없습니다: " << filename << std::endl;
+		std::cerr << "프로젝트 속성 -> 디버깅 -> 작업 디렉터리를 확인하세요." << std::endl;
+		exit(EXIT_FAILURE); // 프로그램 강제 종료
+	}
+
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);
 	glCompileShader(vertexShader);
@@ -234,11 +241,18 @@ void make_vertexShaders()
 		return;
 	}
 }
-void make_fragmentShaders()
+void make_fragmentShaders(const char* filename)
 {
 	GLchar* fragmentSource;
 	//--- 프래그먼트 세이더 읽어 저장하고 컴파일하기
-	fragmentSource = filetobuf("fragment.glsl"); // 프래그세이더 읽어오기
+	fragmentSource = filetobuf(filename); // 프래그세이더 읽어오기
+
+	if (fragmentSource == NULL) {
+		std::cerr << "[치명적 오류] 쉐이더 파일을 찾을 수 없습니다: " << filename << std::endl;
+		std::cerr << "프로젝트 속성 -> 디버깅 -> 작업 디렉터리를 확인하세요." << std::endl;
+		exit(EXIT_FAILURE); // 프로그램 강제 종료
+	}
+
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
 	glCompileShader(fragmentShader);

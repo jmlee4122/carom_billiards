@@ -15,6 +15,6 @@ void InitBuffers(GLuint& VAO, GLuint& VBO_pos, GLuint& VBO_nol, GLuint& EBO,
     Vertex* vData, Vertex* vNormal, Face* fData, size_t vCount, size_t fCount, size_t nCount);
 
 char* filetobuf(const char* file);
-void make_vertexShaders();
-void make_fragmentShaders();
+void make_vertexShaders(const char* filename);
+void make_fragmentShaders(const char* filename);
 GLuint make_shaderProgram();

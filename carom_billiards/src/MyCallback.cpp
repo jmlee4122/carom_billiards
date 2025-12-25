@@ -16,9 +16,15 @@
 #include "MyStruct.h"
 #include "MyUtils.h"
 
+#include "./objects/GameObject.h"
 
 GLvoid DrawScene() {
-
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	for (const auto& obj : world) {
+		obj->Render();
+	}
+	glutSwapBuffers();
 }
 
 GLvoid Reshape(int w, int h) {
