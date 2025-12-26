@@ -17,35 +17,35 @@
 
 #include "./objects/GameObject.h"
 
-void AddObject(std::unique_ptr<GameObject> o) {
+void World::AddObject(std::unique_ptr<GameObject> o) {
 	world.push_back(std::move(o));
 }
-void AddObjects() {
+void World::AddObjects() {
 
 }
-void RemoveObject() {
-
-}
-
-void Update() {
-
-}
-void Render() {
-
-}
-void Clear() {
+void World::RemoveObject() {
 
 }
 
-void Collide() {
+void World::Update() {
 
 }
-void AddCollisionPair() {
+void World::Render() {
 
 }
-void HandleCollisions() {
+void World::Clear() {
 
 }
-void RemoveCollisionObject() {
+
+void World::Collide() {
+
+}
+void World::AddCollisionPair() {
+
+}
+void World::HandleCollisions() {
+
+}
+void World::RemoveCollisionObject() {
 
 }

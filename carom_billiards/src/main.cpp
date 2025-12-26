@@ -14,6 +14,7 @@
 #include "MyStruct.h"
 #include "MyCallback.h"
 #include "game_world.h"
+#include "play_mode.h"
 
 #include "./objects/GameObject.h"
 #include "./objects/Table.h"
@@ -38,10 +39,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glEnable(GL_DEPTH_TEST);
 
 	// *** TEST ***
-	Model* m = new Model;
-	read_obj_file("D:\\carom_billiards\\carom_billiards\\carom_billiards\\src\\assets\\models\\billiard_table.obj", m);
-	print_model_info(m);
-	AddObject(std::make_unique<Table>(m));
+	PlayMode::Init();
 	// *** TEST ***
 
 	//glutSetCursor(GLUT_CURSOR_NONE); // 커서를 보이지 않게 함
