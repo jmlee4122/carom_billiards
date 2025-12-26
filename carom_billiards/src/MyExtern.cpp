@@ -36,3 +36,4 @@ glm::vec3 gLightPos = glm::vec3(500.0f, 500.0f, 500.0f);
 glm::vec3 gLightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
 std::vector<std::unique_ptr<GameObject>> world;
+std::vector<GameMode*> gModeStack;

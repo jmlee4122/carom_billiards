@@ -10,10 +10,6 @@
 
 #include "./objects/Table.h"
 
-void PlayMode::HandleEvents() {
-
-}
-
 void PlayMode::Init() {
 	Model* m = new Model;
 	read_obj_file("D:\\carom_billiards\\carom_billiards\\carom_billiards\\src\\assets\\models\\billiard_table.obj", m);
@@ -21,7 +17,15 @@ void PlayMode::Init() {
 	World::AddObject(std::make_unique<Table>(m));
 }
 
-void PlayMode::Update() {
+void PlayMode::Cleanup() {
+
+}
+
+void PlayMode::HandleEvents(unsigned char key, int x, int y) {
+
+}
+
+void PlayMode::Update(float dt) {
 
 }
 

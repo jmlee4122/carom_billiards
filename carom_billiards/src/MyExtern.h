@@ -8,6 +8,7 @@
 #include <gl/glm/glm.hpp>
 
 class GameObject;
+class GameMode;
 
 extern GLuint vertexShader;
 extern GLuint fragmentShader;
@@ -26,3 +27,6 @@ extern glm::vec3 gLightColor;
 
 // game objects
 extern std::vector<std::unique_ptr<GameObject>> world;
+
+// game mode stack
+extern std::vector<GameMode*> gModeStack;
