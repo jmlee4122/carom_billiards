@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <string>
 
 #include <gl/glew.h>
@@ -9,17 +8,17 @@
 #include <gl/glm/ext.hpp>
 #include <gl/glm/gtc/matrix_transform.hpp>
 
-#include "Table.h"
+#include "Plane.h"
 
 #include "../MyExtern.h"
 #include "../MyStruct.h"
 #include "../MyUtils.h"
 
-Table::Table(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
+Plane::Plane(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->model = model;
 	this->vCount = model->vertex_count, this->fCount = model->face_count;
 	this->uModelLoc = 0, this->uViewLoc = 0, this->uProjLoc = 0, this->uViewPosLoc = 0;
-	this->uObjColorLoc = 0, this->uAlphaLoc = 0, this->uLightsCountLoc = 0;;
+	this->uObjColorLoc = 0, this->uAlphaLoc = 0, this->uLightsCountLoc = 0;
 	this->uColor = glm::vec3(0, 0, 0), this->uAlpha = 1.0f;
 
 	if (model->normals == nullptr) {
@@ -36,6 +35,7 @@ Table::Table(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 
 	//this->uLightPosLoc = glGetUniformLocation(shaderProgramID, "lightPos");
 	//this->uLightColorLoc = glGetUniformLocation(shaderProgramID, "lightColor");
+
 	for (int i = 0; i < gLightsCount; i++) {
 		std::string posName = "lights[" + std::to_string(i) + "].position";
 		std::string colName = "lights[" + std::to_string(i) + "].color";
@@ -55,7 +55,7 @@ Table::Table(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->uAlphaLoc = glGetUniformLocation(shaderProgramID, "alpha");
 }
 
-Table::~Table() {
+Plane::~Plane() {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO_pos);
 	glDeleteBuffers(1, &VBO_nol);
@@ -69,16 +69,16 @@ Table::~Table() {
 	}
 }
 
-void Table::SetColor() {
-	this->uColor = glm::vec3(0, 0, 1);
+void Plane::SetColor() {
+	this->uColor = glm::vec3(0.3f, 0.15f, 0.0f);
 	this->uAlpha = 1.0f;
 }
 
-void Table::Update(float dt) {
+void Plane::Update(float dt) {
 
 }
 
-void Table::Render() {
+void Plane::Render() {
 	glUseProgram(shaderProgramID);
 	glBindVertexArray(VAO);
 
@@ -101,7 +101,7 @@ void Table::Render() {
 	glUniformMatrix4fv(uProjLoc, 1, GL_FALSE, glm::value_ptr(gProjMat));
 
 	// *** Test ***
-	glm::vec3 cameraPos = glm::vec3(-500, 0, -500);
+	glm::vec3 cameraPos = glm::vec3(500, 0, 500);
 	// *** Test ***
 
 	glUniform3f(uViewPosLoc, cameraPos.x, cameraPos.y, cameraPos.z);

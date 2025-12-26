@@ -32,8 +32,13 @@ glm::mat4 gProjMat = glm::perspective(
 );
 
 // light
-glm::vec3 gLightPos = glm::vec3(500.0f, 500.0f, 500.0f);
-glm::vec3 gLightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+unsigned int gLightsCount = 4;
+Light gLights[4] = {
+    { glm::vec3(500.0f, 500.0f, 500.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
+    { glm::vec3(500.0f, 500.0f, -500.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
+    { glm::vec3(-500.0f, 500.0f, 500.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
+    { glm::vec3(-500.0f, 500.0f, -500.0f), glm::vec3(1.0f, 1.0f, 1.0f) }
+};
 
 std::vector<std::unique_ptr<GameObject>> world;
 std::vector<GameMode*> gModeStack;

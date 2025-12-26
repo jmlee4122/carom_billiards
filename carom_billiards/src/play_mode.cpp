@@ -9,12 +9,17 @@
 #include "MyExtern.h"
 
 #include "./objects/Table.h"
+#include "./objects/Plane.h"
 
 void PlayMode::Init() {
 	Model* m = new Model;
 	read_obj_file("./src/assets/models/billiard_table.obj", m);
 	print_model_info(m);
 	World::AddObject(std::make_unique<Table>(m));
+
+	read_obj_file("./src/assets/models/billiard_plane.obj", m);
+	print_model_info(m);
+	World::AddObject(std::make_unique<Plane>(m));
 }
 
 void PlayMode::Cleanup() {

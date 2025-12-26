@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\game_framework.cpp" />
+    <ClCompile Include="src\objects\Plane.cpp" />
     <ClCompile Include="src\play_mode.cpp" />
     <ClCompile Include="src\game_world.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game_framework.h" />
+    <ClInclude Include="src\game_mode.h" />
     <ClInclude Include="src\game_world.h" />
     <ClInclude Include="src\MyCallback.h" />
     <ClInclude Include="src\MyExtern.h" />
@@ -150,6 +152,7 @@
     <ClInclude Include="src\objects\Ball.h" />
     <ClInclude Include="src\objects\Collider.h" />
     <ClInclude Include="src\objects\GameObject.h" />
+    <ClInclude Include="src\objects\Plane.h" />
     <ClInclude Include="src\objects\Table.h" />
     <ClInclude Include="src\play_mode.h" />
   </ItemGroup>

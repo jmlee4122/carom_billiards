@@ -22,8 +22,12 @@ extern unsigned int SCR_WIDTH;
 extern unsigned int SCR_HEIGHT;
 
 // light
-extern glm::vec3 gLightPos;
-extern glm::vec3 gLightColor;
+struct Light {
+    glm::vec3 position;
+    glm::vec3 color;
+};
+extern unsigned int gLightsCount;
+extern Light gLights[4];
 
 // game objects
 extern std::vector<std::unique_ptr<GameObject>> world;
