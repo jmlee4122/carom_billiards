@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <vector>
-#include <GL/glut.h>
+#include <gl/glew.h>
 
 class GameMode
 {

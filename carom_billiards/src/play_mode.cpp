@@ -12,7 +12,7 @@
 
 void PlayMode::Init() {
 	Model* m = new Model;
-	read_obj_file("D:\\carom_billiards\\carom_billiards\\carom_billiards\\src\\assets\\models\\billiard_table.obj", m);
+	read_obj_file("./src/assets/models/billiard_table.obj", m);
 	print_model_info(m);
 	World::AddObject(std::make_unique<Table>(m));
 }
