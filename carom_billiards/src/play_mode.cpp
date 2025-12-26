@@ -6,6 +6,7 @@
 #include "game_world.h"
 #include "MyUtils.h"
 #include "MyStruct.h"
+#include "MyExtern.h"
 
 #include "./objects/Table.h"
 
@@ -22,4 +23,8 @@ void PlayMode::Init() {
 
 void PlayMode::Update() {
 
+}
+
+void PlayMode::Draw() {
+	World::Render();
 }

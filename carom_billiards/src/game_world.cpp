@@ -31,7 +31,9 @@ void World::Update() {
 
 }
 void World::Render() {
-
+	for (const auto& obj : world) {
+		obj->Render();
+	}
 }
 void World::Clear() {
 
