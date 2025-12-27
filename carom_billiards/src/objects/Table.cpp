@@ -18,13 +18,9 @@
 Table::Table(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->model = model;
 	this->vCount = model->vertex_count, this->fCount = model->face_count;
-	this->uModelLoc = 0, this->uViewLoc = 0, this->uProjLoc = 0, this->uViewPosLoc = 0;
-	this->uObjColorLoc = 0, this->uAlphaLoc = 0, this->uLightsCountLoc = 0;;
 	this->uColor = glm::vec3(0, 0, 0), this->uAlpha = 1.0f;
-	for (unsigned int i = 0; i < gLightsCount; i++) {
-		this->uLightsPosLoc[i] = 0;
-		this->uLightsColorLoc[i] = 0;
-	}
+
+	std::cout << "[Table] Vertex Count: " << vCount << ", Face Count: " << fCount << std::endl;
 
 	if (model->normals == nullptr) {
 		std::cerr << "ERROR: Model normals are not loaded!" << std::endl;
@@ -34,27 +30,9 @@ Table::Table(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	InitBuffers(VAO, VBO_pos, VBO_nol, EBO, model->vertices, model->normals,
 		model->faces, vCount, fCount, model->normal_count);
 
+	std::cout << "[Table] VAO: " << VAO << ", VBO_pos: " << VBO_pos << ", EBO: " << EBO << std::endl;
+
 	SetColor();
-
-	glUseProgram(shaderProgramID);
-
-	for (unsigned int i = 0; i < gLightsCount; i++) {
-		std::string posName = "lights[" + std::to_string(i) + "].position";
-		std::string colName = "lights[" + std::to_string(i) + "].color";
-
-		this->uLightsPosLoc[i] = glGetUniformLocation(shaderProgramID, posName.c_str());
-		this->uLightsColorLoc[i] = glGetUniformLocation(shaderProgramID, colName.c_str());
-	}
-	this->uLightsCountLoc = glGetUniformLocation(shaderProgramID, "lightCount");
-
-	this->uModelLoc = glGetUniformLocation(shaderProgramID, "model");
-	this->uViewLoc = glGetUniformLocation(shaderProgramID, "view");
-	this->uProjLoc = glGetUniformLocation(shaderProgramID, "projection");
-
-	this->uViewPosLoc = glGetUniformLocation(shaderProgramID, "viewPos");
-	this->uObjColorLoc = glGetUniformLocation(shaderProgramID, "objectColor");
-
-	this->uAlphaLoc = glGetUniformLocation(shaderProgramID, "alpha");
 }
 
 Table::~Table() {
@@ -74,37 +52,53 @@ Table::~Table() {
 void Table::SetColor() {
 	this->uColor = glm::vec3(0, 0, 1);
 	this->uAlpha = 1.0f;
+	std::cout << "[Table] Color: (" << uColor.r << ", " << uColor.g << ", " << uColor.b << ")" << std::endl;
 }
 
 void Table::Update(float dt) {
 
 }
 
-void Table::Render() {
-	glUseProgram(shaderProgramID);
+void Table::Render(GLuint shaderID) {
+	static bool firstRender = true;
+	if (firstRender) {
+		std::cout << "[Table::Render] ShaderID: " << shaderID 
+		          << ", Face Count: " << fCount 
+		          << ", Triangle Count: " << (fCount * 3) << std::endl;
+		firstRender = false;
+	}
+
 	glBindVertexArray(VAO);
 
-	for (unsigned int i = 0; i < gLightsCount; i++) {
-		glUniform3fv(uLightsPosLoc[i], 1, glm::value_ptr(gLights[i].position));
-		glUniform3fv(uLightsColorLoc[i], 1, glm::value_ptr(gLights[i].color));
+	glm::mat4 modelMat = glm::mat4(1.0f);
+
+	// 각 쉐이더에 맞는 uniform location을 동적으로 가져옴
+	GLint modelLoc = glGetUniformLocation(shaderID, "model");
+	if (modelLoc != -1) {
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
 	}
-	glUniform1i(uLightsCountLoc, gLightsCount);
+	else {
+		std::cout << "[Table::Render] WARNING: 'model' uniform not found in shader " << shaderID << std::endl;
+	}
 
-	// *** Test ***
-	glm::mat4 modelMat = glm::mat4(1.0);
-	// *** Test ***
+	// Pass 2 (일반 렌더링)일 때만 색상 전송
+	GLint colorLoc = glGetUniformLocation(shaderID, "objectColor");
+	if (colorLoc != -1) {
+		glUniform3fv(colorLoc, 1, glm::value_ptr(uColor));
+	}
 
-	glUniformMatrix4fv(uModelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
-	glUniformMatrix4fv(uViewLoc, 1, GL_FALSE, glm::value_ptr(gViewMat));
-	glUniformMatrix4fv(uProjLoc, 1, GL_FALSE, glm::value_ptr(gProjMat));
+	GLint alphaLoc = glGetUniformLocation(shaderID, "alpha");
+	if (alphaLoc != -1) {
+		glUniform1f(alphaLoc, uAlpha);
+	}
 
-	// *** Test ***
-	glm::vec3 cameraPos = glm::vec3(500, 0, 500);
-	// *** Test ***
-
-	glUniform3f(uViewPosLoc, cameraPos.x, cameraPos.y, cameraPos.z);
-	glUniform3fv(uObjColorLoc, 1, glm::value_ptr(uColor));
-	glUniform1f(uAlphaLoc, uAlpha);
 	glDrawElements(GL_TRIANGLES, fCount * 3, GL_UNSIGNED_INT, (void*)(0));
+	
+	// OpenGL 에러 체크
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR) {
+		std::cerr << "[Table::Render] OpenGL Error: " << err << std::endl;
+	}
+	
 	glBindVertexArray(0);
 }

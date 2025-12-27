@@ -34,6 +34,6 @@ void PlayMode::Update(float dt) {
 
 }
 
-void PlayMode::Draw() {
-	World::Render();
+void PlayMode::Draw(GLuint shaderID) {
+	World::Render(shaderID);
 }

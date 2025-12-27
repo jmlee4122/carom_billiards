@@ -30,9 +30,9 @@ void World::RemoveObject() {
 void World::Update() {
 
 }
-void World::Render() {
+void World::Render(GLuint shaderID) {
 	for (const auto& obj : world) {
-		obj->Render();
+		obj->Render(shaderID);
 	}
 }
 void World::Clear() {

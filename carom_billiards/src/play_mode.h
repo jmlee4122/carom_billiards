@@ -9,5 +9,5 @@ public:
     void Cleanup() override;
     void HandleEvents(unsigned char key, int x, int y) override;
     void Update(float dt) override;
-    void Draw() override;
+    void Draw(GLuint shaderID) override;
 };

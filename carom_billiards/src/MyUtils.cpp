@@ -215,75 +215,77 @@ char* filetobuf(const char* file)
 	buf[length] = 0; // Null terminator
 	return buf; // Return the buffer
 }
-void make_vertexShaders(const char* filename)
+void make_vertexShaders(const char* filename, GLuint& vsname)
 {
 	GLchar* vertexSource;
-	//--- 버텍스 세이더 읽어 저장하고 컴파일 하기
+	//--- 버텍스 셰이더 읽어 저장하고 컴파일 하기
 	//--- filetobuf: 사용자정의 함수로 텍스트를 읽어서 문자열에 저장하는 함수
 	vertexSource = filetobuf(filename);
 
 	if (vertexSource == NULL) {
-		std::cerr << "[치명적 오류] 쉐이더 파일을 찾을 수 없습니다: " << filename << std::endl;
-		std::cerr << "프로젝트 속성 -> 디버깅 -> 작업 디렉터리를 확인하세요." << std::endl;
+		std::cerr << "[치명적 오류] 셰이더 파일을 찾을 수 없습니다: " << filename << std::endl;
+		std::cerr << "프로젝트 속성 -> 디버깅 -> 작업 디렉터리 확인하세요." << std::endl;
 		exit(EXIT_FAILURE); // 프로그램 강제 종료
 	}
 
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexSource, NULL);
-	glCompileShader(vertexShader);
+	vsname = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vsname, 1, &vertexSource, NULL);
+	glCompileShader(vsname);
 	GLint result;
 	GLchar errorLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(vsname, GL_COMPILE_STATUS, &result);
 	if (!result)
 	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, errorLog);
+		glGetShaderInfoLog(vsname, 512, NULL, errorLog);
 		std::cerr << "ERROR: vertex shader 컴파일 실패\n" << errorLog << std::endl;
 		return;
 	}
 }
-void make_fragmentShaders(const char* filename)
+
+void make_fragmentShaders(const char* filename, GLuint& fsname)
 {
 	GLchar* fragmentSource;
-	//--- 프래그먼트 세이더 읽어 저장하고 컴파일하기
+	//--- 프래그먼트 셰이더 읽어 저장하고 컴파일하기
 	fragmentSource = filetobuf(filename); // 프래그세이더 읽어오기
 
 	if (fragmentSource == NULL) {
-		std::cerr << "[치명적 오류] 쉐이더 파일을 찾을 수 없습니다: " << filename << std::endl;
-		std::cerr << "프로젝트 속성 -> 디버깅 -> 작업 디렉터리를 확인하세요." << std::endl;
+		std::cerr << "[치명적 오류] 셰이더 파일을 찾을 수 없습니다: " << filename << std::endl;
+		std::cerr << "프로젝트 속성 -> 디버깅 -> 작업 디렉터리 확인하세요." << std::endl;
 		exit(EXIT_FAILURE); // 프로그램 강제 종료
 	}
 
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-	glCompileShader(fragmentShader);
+	fsname = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fsname, 1, &fragmentSource, NULL);
+	glCompileShader(fsname);
 	GLint result;
 	GLchar errorLog[512];
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(fsname, GL_COMPILE_STATUS, &result);
 	if (!result)
 	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, errorLog);
+		glGetShaderInfoLog(fsname, 512, NULL, errorLog);
 		std::cerr << "ERROR: frag_shader 컴파일 실패\n" << errorLog << std::endl;
 		return;
 	}
 }
-GLuint make_shaderProgram()
+
+GLuint make_shaderProgram(GLuint vsname, GLuint fsname)
 {
 	GLint result;
-	GLchar* errorLog = NULL;
+	GLchar errorLog[512];
 	GLuint shaderID;
 	shaderID = glCreateProgram(); //--- 세이더 프로그램 만들기
-	glAttachShader(shaderID, vertexShader); //--- 세이더 프로그램에 버텍스 세이더 붙이기
-	glAttachShader(shaderID, fragmentShader); //--- 세이더 프로그램에 프래그먼트 세이더 붙이기
+	glAttachShader(shaderID, vsname); //--- 세이더 프로그램에 버텍스 세이더 붙이기
+	glAttachShader(shaderID, fsname); //--- 세이더 프로그램에 프래그먼트 세이더 붙이기
 	glLinkProgram(shaderID); //--- 세이더 프로그램 링크하기
-	glDeleteShader(vertexShader); //--- 세이더 객체를 세이더 프로그램에 링크했음으로, 세이더 객체 자체는 삭제 가능
-	glDeleteShader(fragmentShader);
+	glDeleteShader(vsname); //--- 세이더 객체를 세이더 프로그램에 링크했음으로, 세이더 객체 자체는 삭제 가능
+	glDeleteShader(fsname);
 	glGetProgramiv(shaderID, GL_LINK_STATUS, &result); // ---세이더가 잘 연결되었는지 체크하기
 	if (!result) {
 		glGetProgramInfoLog(shaderID, 512, NULL, errorLog);
 		std::cerr << "ERROR: shader program 연결 실패\n" << errorLog << std::endl;
 		return false;
 	}
-	glUseProgram(shaderID); //--- 만들어진 세이더 프로그램 사용하기
+	// glUseProgram(shaderID); //--- 만들어진 세이더 프로그램 사용하기
 	//--- 여러 개의 세이더프로그램 만들 수 있고, 그 중 한개의 프로그램을 사용하려면
 	//--- glUseProgram 함수를 호출하여 사용 할 특정 프로그램을 지정한다.
 	//--- 사용하기 직전에 호출할 수 있다.

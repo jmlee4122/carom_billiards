@@ -11,7 +11,7 @@ namespace World
 	void RemoveObject();
 
 	void Update();
-	void Render();
+	void Render(GLuint shaderID);
 	void Clear();
 
 	void Collide();

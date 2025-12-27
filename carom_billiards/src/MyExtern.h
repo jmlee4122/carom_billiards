@@ -14,6 +14,20 @@ extern GLuint vertexShader;
 extern GLuint fragmentShader;
 extern GLuint shaderProgramID;
 
+// shadow shaders
+extern GLuint shadowVertexShader;
+extern GLuint shadowFragmentShader;
+extern GLuint shadowShaderProgramID;
+
+// showdow map
+extern GLuint depthMapFBO;
+extern GLuint depthMap;
+extern const unsigned int SHADOW_WIDTH, SHADOW_HEIGHT;
+
+// [추가] 빛 공간 변환 행렬 (쉐이더로 넘겨줄 것)
+extern glm::mat4 lightSpaceMatrix;
+
+extern glm::vec3 cameraPos;
 extern glm::mat4 gViewMat;
 extern glm::mat4 gProjMat;
 
@@ -27,7 +41,7 @@ struct Light {
     glm::vec3 color;
 };
 extern unsigned int gLightsCount;
-extern Light gLights[4];
+extern Light gLights[5];
 
 // game objects
 extern std::vector<std::unique_ptr<GameObject>> world;

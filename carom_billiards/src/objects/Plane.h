@@ -15,16 +15,13 @@ public:
     ~Plane() override;
     void SetColor();
     void Update(float dt) override;
-    void Render() override;
+    void Render(GLuint shaderID) override;
 
 private:
     Model* model;
     GLuint VAO, VBO_pos, VBO_nol, EBO;
     GLuint vCount, fCount;
-    GLuint uModelLoc, uViewLoc, uProjLoc;
-    GLuint uObjColorLoc, uViewPosLoc, uAlphaLoc;
-    GLuint uLightsPosLoc[4], uLightsColorLoc[4];
-    GLuint uLightsCountLoc;
-    glm::vec3 uColor; float uAlpha;
+    glm::vec3 uColor;
+    float uAlpha;
 };
 

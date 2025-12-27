@@ -93,5 +93,8 @@
   <ItemGroup>
     <None Include="src\assets\shaders\vertex.glsl" />
     <None Include="src\assets\shaders\fragment.glsl" />
+    <None Include="src\assets\shaders\shadow_vertex.glsl" />
+    <None Include="src\assets\shaders\shadow_fragment.glsl" />
+    <None Include="glsl src\assets\shaders\fragment.glsl" />
   </ItemGroup>
 </Project>
