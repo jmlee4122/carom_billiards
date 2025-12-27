@@ -29,13 +29,13 @@ void Framework::Run(int argc, char** argv, GameMode* startMode) {
 
     glutDisplayFunc(DrawScene); //--- 출력 콜백 함수
     glutReshapeFunc(Reshape);
-    /*glutKeyboardFunc(Keyboard);
+    glutKeyboardFunc(Keyboard);
     glutKeyboardUpFunc(KeyboardUp);
     glutSpecialFunc(SpecialKey);
     glutSpecialUpFunc(SpecialKeyUp);
     glutMouseFunc(Mouse);
     glutPassiveMotionFunc(PassiveMotion);
-    glutTimerFunc(0, Timer, 0);*/
+    glutTimerFunc(0, Timer, 0);
     glutMainLoop();
 
     glDisable(GL_DEPTH_TEST);
@@ -61,7 +61,7 @@ bool Framework::Initialize(int argc, char** argv) {
     // --- 윈도우 생성 (GLUT) ---
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowPosition(0, 0);
+    glutInitWindowPosition(100, 100);
     glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
     glutCreateWindow("Carom Billiards");
 

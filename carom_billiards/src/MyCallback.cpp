@@ -2,8 +2,8 @@
 #include <vector>
 #include <string>
 #include <cstdlib>
-#include <ctime>
 #include <algorithm> 
+
 #include <gl/glew.h>
 #include <gl/freeglut.h>
 #include <gl/freeglut_ext.h>
@@ -47,8 +47,10 @@ GLvoid DrawScene() {
     glUniformMatrix4fv(glGetUniformLocation(shadowShaderProgramID, "lightSpaceMatrix"),
         1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
-    for (auto r : gModeStack) {
-        r->Draw(shadowShaderProgramID);
+    if (!gModeStack.empty()) {
+        for (auto r : gModeStack) {
+            r->Draw(shadowShaderProgramID);
+        }
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -91,10 +93,12 @@ GLvoid DrawScene() {
     }
 
     // °´Ã¼ ·»´õ¸µ
-    for (auto r : gModeStack) {
-        r->Draw(shaderProgramID);
+    if (!gModeStack.empty()) {
+        for (auto r : gModeStack) {
+            r->Draw(shaderProgramID);
+        }
     }
-    
+
     glutSwapBuffers();
 }
 
@@ -103,7 +107,10 @@ GLvoid Reshape(int w, int h) {
 }
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
-
+    switch (key) {
+    case 'q':
+        glutLeaveMainLoop();
+    }
 }
 
 GLvoid KeyboardUp(unsigned char key, int x, int y) {
@@ -119,7 +126,19 @@ GLvoid SpecialKeyUp(int key, int x, int y) {
 }
 
 GLvoid Timer(int value) {
+    int nextTime = glutGet(GLUT_ELAPSED_TIME);
+    float deltaTime = (float)(nextTime - gCurrTime) / 1000.0f;
 
+    if (!gModeStack.empty()) {
+        for (auto r : gModeStack) {
+            r->Update(deltaTime);
+        }
+    }
+
+    gCurrTime = nextTime;
+
+    glutPostRedisplay();
+    glutTimerFunc(16, Timer, 0); // ¾à 60 FPS
 }
 
 GLvoid Mouse(int button, int state, int x, int y) {

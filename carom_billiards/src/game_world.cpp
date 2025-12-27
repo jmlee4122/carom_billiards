@@ -27,8 +27,10 @@ void World::RemoveObject() {
 
 }
 
-void World::Update() {
-
+void World::Update(float dt) {
+	for (const auto& obj : world) {
+		obj->Update(dt);
+	}
 }
 void World::Render(GLuint shaderID) {
 	for (const auto& obj : world) {

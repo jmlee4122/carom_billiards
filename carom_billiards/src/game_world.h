@@ -10,7 +10,7 @@ namespace World
 	void AddObjects();
 	void RemoveObject();
 
-	void Update();
+	void Update(float dt);
 	void Render(GLuint shaderID);
 	void Clear();
 

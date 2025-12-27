@@ -48,3 +48,6 @@ extern std::vector<std::unique_ptr<GameObject>> world;
 
 // game mode stack
 extern std::vector<GameMode*> gModeStack;
+
+// time
+extern int gCurrTime;
