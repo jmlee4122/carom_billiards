@@ -51,3 +51,6 @@ extern std::vector<GameMode*> gModeStack;
 
 // time
 extern int gCurrTime;
+
+extern float pixel_per_mm;
+extern float pixel_per_cm;
