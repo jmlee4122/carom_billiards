@@ -53,7 +53,7 @@ Light gLights[5] = {
     { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) }
 };
 
-std::vector<std::unique_ptr<GameObject>> world;
+std::vector<std::shared_ptr<GameObject>> world;
 Collider* gCollider = nullptr;
 
 std::vector<GameMode*> gModeStack;

@@ -18,3 +18,5 @@ char* filetobuf(const char* file);
 void make_vertexShaders(const char* filename, GLuint& vsname);
 void make_fragmentShaders(const char* filename, GLuint& fsname);
 GLuint make_shaderProgram(GLuint vsname, GLuint fsname);
+
+void PrintCollisionPairs();

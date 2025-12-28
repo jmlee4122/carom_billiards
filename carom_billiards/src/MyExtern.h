@@ -7,11 +7,11 @@
 #include <gl/freeglut.h>
 #include <gl/glm/glm.hpp>
 
+#include "MyStruct.h"
+
 class GameObject;
 class GameMode;
 class Collider;
-
-struct CollisionPair;
 
 extern GLuint vertexShader;
 extern GLuint fragmentShader;
@@ -47,7 +47,7 @@ extern unsigned int gLightsCount;
 extern Light gLights[5];
 
 // game objects
-extern std::vector<std::unique_ptr<GameObject>> world;
+extern std::vector<std::shared_ptr<GameObject>> world;
 extern Collider* gCollider;
 
 // game mode stack

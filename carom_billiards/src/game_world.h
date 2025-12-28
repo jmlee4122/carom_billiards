@@ -6,7 +6,7 @@ class GameObject;
 
 namespace World
 {
-	void AddObject(std::unique_ptr<GameObject> o);
+	void AddObject(std::shared_ptr<GameObject> o);
 	void AddObjects();
 	void RemoveObject();
 

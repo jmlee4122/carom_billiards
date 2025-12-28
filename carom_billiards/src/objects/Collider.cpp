@@ -13,6 +13,8 @@
 #include "Collider.h"
 
 Collider::Collider(Model* model) {
+	this->objectName = "wall";
+
 	this->max_x = model->vertices[0].x;
 	this->max_y = model->vertices[0].y;
 	this->max_z = model->vertices[0].z;
@@ -60,4 +62,16 @@ void Collider::MakeWalls() {
 		std::cout << i << " end point   : ";
 		std::cout << this->walls[i].end.x << " " << this->walls[i].end.y << " " << this->walls[i].end.z << std::endl;
 	}
+}
+
+void Collider::Update(float dt) {
+
+}
+
+void Collider::Render(GLuint shaderID) {
+
+}
+
+std::string Collider::GetObjectName() {
+	return this->objectName;
 }

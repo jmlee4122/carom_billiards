@@ -19,6 +19,8 @@
 #include "MyStruct.h"
 #include "MyExtern.h"
 
+#include "./objects/GameObject.h"
+
 void read_newline(char* str) {
 	char* pos;
 	if ((pos = strchr(str, '\n')) != NULL)
@@ -290,4 +292,19 @@ GLuint make_shaderProgram(GLuint vsname, GLuint fsname)
 	//--- glUseProgram 함수를 호출하여 사용 할 특정 프로그램을 지정한다.
 	//--- 사용하기 직전에 호출할 수 있다.
 	return shaderID;
+}
+
+void PrintCollisionPairs() {
+	for (int i = 0; i < gPairs.size(); i++) {
+		std::cout << "=== [" << gPairs[i].pairName << "] ===" << std::endl;
+		for (int j = 0; j < gPairs[i].objects[0].size(); j++) {
+			std::cout << "=== object[0] list ===" << std::endl;
+			std::cout << (gPairs[i].objects[0])[j]->GetObjectName() << std::endl;
+		}
+		for (int j = 0; j < gPairs[i].objects[1].size(); j++) {
+			std::cout << "=== object[1] list ===" << std::endl;
+			std::cout << (gPairs[i].objects[1])[j]->GetObjectName() << std::endl;
+		}
+		std::cout << std::endl;
+	}
 }

@@ -15,9 +15,14 @@ public:
 	Collider(Model* model);
 	~Collider() override;
 	void MakeWalls();
+	void Update(float dt) override;
+	void Render(GLuint shaderID) override;
+	std::string GetObjectName() override;
 
 private:
 	float max_x, max_y, max_z;
 	float min_x, min_y, min_z;
 	std::vector<Wall> walls;
+
+	std::string objectName;
 };

@@ -6,6 +6,8 @@
 #include <gl/freeglut.h>
 #include <gl/glm/glm.hpp>
 
+class GameObject;
+
 struct Vertex {
 	float x, y, z;
 };

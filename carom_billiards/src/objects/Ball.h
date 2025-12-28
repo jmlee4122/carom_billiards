@@ -22,6 +22,7 @@ public:
     void SetScale();
     void SetVelocity(float dt);
     void SetModelMat(float dt);
+    std::string GetObjectName() override;
 
 private:
     Model* model;
@@ -35,5 +36,7 @@ private:
     glm::vec3 scale;
     glm::vec3 velocity;
     glm::mat4 modelMat;
+
+    std::string objectName;
 };
 

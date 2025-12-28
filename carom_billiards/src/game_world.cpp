@@ -17,8 +17,8 @@
 
 #include "./objects/GameObject.h"
 
-void World::AddObject(std::unique_ptr<GameObject> o) {
-	world.push_back(std::move(o));
+void World::AddObject(std::shared_ptr<GameObject> o) {
+	world.push_back(o);
 }
 
 void World::AddObjects() {

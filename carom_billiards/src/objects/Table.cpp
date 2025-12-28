@@ -19,6 +19,7 @@ Table::Table(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->model = model;
 	this->vCount = model->vertex_count, this->fCount = model->face_count;
 	this->uColor = glm::vec3(0, 0, 0), this->uAlpha = 1.0f;
+	this->objectName = "table";
 
 	std::cout << "[Table] Vertex Count: " << vCount << ", Face Count: " << fCount << std::endl;
 
@@ -101,4 +102,8 @@ void Table::Render(GLuint shaderID) {
 	}
 	
 	glBindVertexArray(0);
+}
+
+std::string Table::GetObjectName() {
+	return this->objectName;
 }

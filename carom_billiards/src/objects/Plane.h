@@ -16,6 +16,7 @@ public:
     void SetColor();
     void Update(float dt) override;
     void Render(GLuint shaderID) override;
+    std::string GetObjectName() override;
 
 private:
     Model* model;
@@ -23,5 +24,7 @@ private:
     GLuint vCount, fCount;
     glm::vec3 uColor;
     float uAlpha;
+
+    std::string objectName;
 };
 

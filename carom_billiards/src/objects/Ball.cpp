@@ -25,6 +25,7 @@ Ball::Ball(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->scale = glm::vec3(1.0f);
 	this->velocity = glm::vec3(0.0f);
 	this->modelMat = glm::mat4(1.0f);
+	this->objectName = "ball";
 
 	std::cout << "[Ball] Vertex Count: " << vCount << ", Face Count: " << fCount << std::endl;
 
@@ -122,4 +123,8 @@ void Ball::Render(GLuint shaderID) {
 	}
 
 	glBindVertexArray(0);
+}
+
+std::string Ball::GetObjectName() {
+	return this->objectName;
 }
