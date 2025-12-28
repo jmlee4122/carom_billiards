@@ -11,6 +11,7 @@
 #include "./objects/Table.h"
 #include "./objects/Plane.h"
 #include "./objects/Ball.h"
+#include "./objects/Collider.h"
 
 void PlayMode::Init() {
 	Model* m = new Model;
@@ -25,6 +26,11 @@ void PlayMode::Init() {
 	read_obj_file("./src/assets/models/billiard_ball.obj", m);
 	print_model_info(m);
 	World::AddObject(std::make_unique<Ball>(m));
+
+	read_obj_file("./src/assets/models/billiard_collider.obj", m);
+	print_model_info(m);
+	gCollider = new Collider(m);
+	gCollider->PrintMaxAndMin();
 }
 
 void PlayMode::Cleanup() {

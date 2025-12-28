@@ -9,6 +9,7 @@
 
 class GameObject;
 class GameMode;
+class Collider;
 
 extern GLuint vertexShader;
 extern GLuint fragmentShader;
@@ -45,6 +46,7 @@ extern Light gLights[5];
 
 // game objects
 extern std::vector<std::unique_ptr<GameObject>> world;
+extern Collider* gCollider;
 
 // game mode stack
 extern std::vector<GameMode*> gModeStack;

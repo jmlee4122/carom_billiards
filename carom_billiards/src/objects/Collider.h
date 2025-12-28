@@ -11,7 +11,9 @@ class Collider
 public:
 	Collider(Model* model);
 	~Collider();
+	void PrintMaxAndMin() const;
 private:
-	
+	float max_x, max_z;
+	float min_x, min_y, min_z;
 };
 

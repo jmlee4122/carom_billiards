@@ -24,8 +24,8 @@ const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 glm::mat4 lightSpaceMatrix;
 
 // screen size
-unsigned int SCR_WIDTH = 800;
-unsigned int SCR_HEIGHT = 600;
+unsigned int SCR_WIDTH = 1920;
+unsigned int SCR_HEIGHT = 1080;
 
 glm::vec3 cameraPos(300.0f, 300.0f, 300.0f);
 
@@ -54,6 +54,8 @@ Light gLights[5] = {
 };
 
 std::vector<std::unique_ptr<GameObject>> world;
+Collider* gCollider = nullptr;
+
 std::vector<GameMode*> gModeStack;
 
 int gCurrTime = 0;
