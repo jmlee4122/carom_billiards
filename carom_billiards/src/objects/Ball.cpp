@@ -128,3 +128,7 @@ void Ball::Render(GLuint shaderID) {
 std::string Ball::GetObjectName() {
 	return this->objectName;
 }
+
+void Ball::HandleCollision(std::string name, GameObject* other) {
+
+}

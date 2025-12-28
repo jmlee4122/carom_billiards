@@ -106,3 +106,7 @@ void Plane::Render(GLuint shaderID) {
 std::string Plane::GetObjectName() {
 	return this->objectName;
 }
+
+void Plane::HandleCollision(std::string name, GameObject* other) {
+
+}

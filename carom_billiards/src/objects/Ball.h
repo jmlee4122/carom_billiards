@@ -16,6 +16,7 @@ public:
     void SetColor();
     void Update(float dt) override;
     void Render(GLuint shaderID) override;
+    void HandleCollision(std::string name, GameObject* other) override;
 
     void SetPosition(float dt);
     void SetRotation(float dt);

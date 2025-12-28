@@ -3,6 +3,8 @@
 #include <memory>
 
 class GameObject;
+class Ball;
+class Collider;
 
 namespace World
 {
@@ -14,7 +16,9 @@ namespace World
 	void Render(GLuint shaderID);
 	void Clear();
 
-	void Collide();
+	bool CheckCollision(const std::string& pairName, GameObject* a, GameObject* b);
+	bool Spheres(Ball* a, Ball* b);
+	bool SphereAndLine(Ball* a, Collider* b);
 	void AddCollisionPair(const std::string& pairName, GameObject* a, GameObject* b);
 	void HandleCollisions();
 	void RemoveCollisionObject();

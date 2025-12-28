@@ -18,6 +18,7 @@ public:
 	void Update(float dt) override;
 	void Render(GLuint shaderID) override;
 	std::string GetObjectName() override;
+	void HandleCollision(std::string name, GameObject* other) override;
 
 private:
 	float max_x, max_y, max_z;

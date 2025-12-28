@@ -107,3 +107,7 @@ void Table::Render(GLuint shaderID) {
 std::string Table::GetObjectName() {
 	return this->objectName;
 }
+
+void Table::HandleCollision(std::string name, GameObject* other) {
+
+}

@@ -75,3 +75,7 @@ void Collider::Render(GLuint shaderID) {
 std::string Collider::GetObjectName() {
 	return this->objectName;
 }
+
+void Collider::HandleCollision(std::string name, GameObject* other) {
+
+}

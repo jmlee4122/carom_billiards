@@ -16,6 +16,8 @@
 #include "game_world.h"
 
 #include "./objects/GameObject.h"
+#include "./objects/Ball.h"
+#include "./objects/Collider.h"
 
 void World::AddObject(std::shared_ptr<GameObject> o) {
 	world.push_back(o);
@@ -45,7 +47,23 @@ void World::Clear() {
 
 }
 
-void World::Collide() {
+bool World::CheckCollision(const std::string& pairName, GameObject* a, GameObject* b) {
+	if (pairName == "ball:ball") {
+		return World::Spheres(static_cast<Ball*>(a), static_cast<Ball*>(b));
+	}
+	else if (pairName == "ball:wall") {
+		return World::SphereAndLine(static_cast<Ball*>(a), static_cast<Collider*>(b));
+	}
+	else {
+		return false;
+	}
+}
+
+bool World::Spheres(Ball* a, Ball* b) {
+	// 동일한 공 충돌 검사 제외
+}
+
+bool World::SphereAndLine(Ball* a, Collider* b) {
 
 }
 
@@ -65,7 +83,25 @@ void World::AddCollisionPair(const std::string& pairName, GameObject* a, GameObj
 }
 
 void World::HandleCollisions() {
+	for (auto& pair : gPairs) {
+		std::string name = pair.pairName;
 
+		auto& groupA = pair.objects[0];
+		auto& groupB = pair.objects[1];
+
+		for (GameObject* a : groupA) {
+			if (a == nullptr) continue;
+
+			for (GameObject* b : groupB) {
+				if (b == nullptr) continue;
+
+				if (World::CheckCollision(name, a, b)) {
+					a->HandleCollision(name, b);
+					b->HandleCollision(name, a);
+				}
+			}
+		}
+	}
 }
 
 void World::RemoveCollisionObject() {
