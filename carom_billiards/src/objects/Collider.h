@@ -4,14 +4,16 @@
 #include <gl/freeglut.h>
 #include <gl/glm/glm.hpp>
 
+#include "GameObject.h"
+
 struct Model;
 struct Wall;
 
-class Collider
+class Collider : public GameObject
 {
 public:
 	Collider(Model* model);
-	~Collider();
+	~Collider() override;
 	void MakeWalls();
 
 private:

@@ -28,3 +28,8 @@ struct Wall {
 	glm::vec3 start;
 	glm::vec3 end;
 };
+
+struct CollisionPair {
+	std::string pairName;
+	std::vector<GameObject*> objects[2];
+};

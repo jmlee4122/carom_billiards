@@ -20,9 +20,11 @@
 void World::AddObject(std::unique_ptr<GameObject> o) {
 	world.push_back(std::move(o));
 }
+
 void World::AddObjects() {
 
 }
+
 void World::RemoveObject() {
 
 }
@@ -32,11 +34,13 @@ void World::Update(float dt) {
 		obj->Update(dt);
 	}
 }
+
 void World::Render(GLuint shaderID) {
 	for (const auto& obj : world) {
 		obj->Render(shaderID);
 	}
 }
+
 void World::Clear() {
 
 }
@@ -44,12 +48,26 @@ void World::Clear() {
 void World::Collide() {
 
 }
-void World::AddCollisionPair() {
 
+void World::AddCollisionPair(const std::string& pairName, GameObject* a, GameObject* b) {
+	for (int i = 0; i < gPairs.size(); i++) {
+		if (pairName == gPairs[i].pairName) {
+			if (a != nullptr) gPairs[i].objects[0].push_back(a);
+			if (b != nullptr) gPairs[i].objects[1].push_back(b);
+			return;
+		}
+	}
+	CollisionPair pair;
+	pair.pairName = pairName;
+	if (a != nullptr) pair.objects[0].push_back(a);
+	if (b != nullptr) pair.objects[1].push_back(b);
+	gPairs.push_back(pair);
 }
+
 void World::HandleCollisions() {
 
 }
+
 void World::RemoveCollisionObject() {
 
 }

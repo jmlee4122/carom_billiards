@@ -11,6 +11,8 @@ class GameObject;
 class GameMode;
 class Collider;
 
+struct CollisionPair;
+
 extern GLuint vertexShader;
 extern GLuint fragmentShader;
 extern GLuint shaderProgramID;
@@ -56,3 +58,6 @@ extern int gCurrTime;
 
 extern float pixel_per_mm;
 extern float pixel_per_cm;
+
+// collision pair
+extern std::vector<CollisionPair> gPairs;

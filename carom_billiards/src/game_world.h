@@ -15,7 +15,7 @@ namespace World
 	void Clear();
 
 	void Collide();
-	void AddCollisionPair();
+	void AddCollisionPair(const std::string& pairName, GameObject* a, GameObject* b);
 	void HandleCollisions();
 	void RemoveCollisionObject();
 }

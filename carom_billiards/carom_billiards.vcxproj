@@ -161,7 +161,6 @@
     <ClInclude Include="src\play_mode.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="glsl src\assets\shaders\fragment.glsl" />
     <None Include="src\assets\shaders\fragment.glsl" />
     <None Include="src\assets\shaders\shadow_fragment.glsl" />
     <None Include="src\assets\shaders\shadow_vertex.glsl" />
