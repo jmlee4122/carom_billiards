@@ -14,6 +14,7 @@
 
 Collider::Collider(Model* model) {
 	this->objectName = "wall";
+	this->collisionNormal = glm::vec3(0, 0, 0);
 
 	this->max_x = model->vertices[0].x;
 	this->max_y = model->vertices[0].y;
@@ -78,4 +79,12 @@ std::string Collider::GetObjectName() {
 
 void Collider::HandleCollision(std::string name, GameObject* other) {
 
+}
+
+void Collider::SetCollisionNormal(glm::vec3 nol) {
+	this->collisionNormal = nol;
+}
+
+std::vector<Wall> Collider::GetWalls() const {
+	return this->walls;
 }

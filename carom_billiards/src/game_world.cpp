@@ -61,10 +61,38 @@ bool World::CheckCollision(const std::string& pairName, GameObject* a, GameObjec
 
 bool World::Spheres(Ball* a, Ball* b) {
 	// 동일한 공 충돌 검사 제외
+	return false;
 }
 
 bool World::SphereAndLine(Ball* a, Collider* b) {
+	glm::vec3 ballPos = a->GetPosition();
+	float ballRadius = a->GetRadius();
+	std::vector<Wall> walls = b->GetWalls();
 
+	for (auto& wall : walls) {
+		// start point -> ball position
+		glm::vec3 startBall = ballPos - wall.start;
+		// start point -> end point
+		glm::vec3 startEnd = wall.end - wall.start;
+		// dot (startBall -> startEnd)
+		float dotResult = glm::dot(startEnd, startBall);
+		// start point -> closest point
+		glm::vec3 startClosest = dotResult * startEnd / 
+			startEnd.x * startEnd.x + startEnd.y * startEnd.y + startEnd.z * startEnd.z;
+		// ball position -> closest point
+		glm::vec3 ballClosest = startClosest - startBall;
+		// lenght (ball position -> closest point)
+		float distance = 
+			sqrt(ballClosest.x * ballClosest.x + ballClosest.y * ballClosest.y + ballClosest.z * ballClosest.z);
+
+		if (distance <= ballRadius) {
+			glm::vec3 nol = glm::normalize(-ballClosest);
+			b->SetCollisionNormal(nol);
+			return true;
+		}
+	}
+	b->SetCollisionNormal(glm::vec3(0, 0, 0));
+	return false;
 }
 
 void World::AddCollisionPair(const std::string& pairName, GameObject* a, GameObject* b) {

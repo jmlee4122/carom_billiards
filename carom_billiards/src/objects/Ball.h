@@ -25,12 +25,16 @@ public:
     void SetModelMat(float dt);
     std::string GetObjectName() override;
 
+    glm::vec3 GetPosition() const;
+    float GetRadius() const;
+
 private:
     Model* model;
     GLuint VAO, VBO_pos, VBO_nol, EBO;
     GLuint vCount, fCount;
     glm::vec3 uColor;
     float uAlpha;
+    float radius;
 
     glm::vec3 position;
     glm::vec3 rotation;

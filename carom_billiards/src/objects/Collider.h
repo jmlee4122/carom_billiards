@@ -19,6 +19,9 @@ public:
 	void Render(GLuint shaderID) override;
 	std::string GetObjectName() override;
 	void HandleCollision(std::string name, GameObject* other) override;
+	void SetCollisionNormal(glm::vec3 nol);
+
+	std::vector<Wall> GetWalls() const;
 
 private:
 	float max_x, max_y, max_z;
@@ -26,4 +29,6 @@ private:
 	std::vector<Wall> walls;
 
 	std::string objectName;
+
+	glm::vec3 collisionNormal;
 };
