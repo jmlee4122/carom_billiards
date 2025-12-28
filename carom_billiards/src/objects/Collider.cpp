@@ -8,6 +8,7 @@
 #include <gl/glm/gtc/matrix_transform.hpp>
 
 #include "../MyStruct.h"
+#include "../game_world.h"
 
 #include "Collider.h"
 
@@ -32,6 +33,8 @@ Collider::Collider(Model* model) {
 			this->min_z = std::min(min_z, target.z);
 		}
 	}
+
+	World::AddCollisionPair("ball:wall", nullptr, this);
 }
 
 Collider::~Collider() {

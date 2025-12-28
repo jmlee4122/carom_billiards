@@ -14,6 +14,7 @@
 #include "../MyExtern.h"
 #include "../MyStruct.h"
 #include "../MyUtils.h"
+#include "../game_world.h"
 
 Ball::Ball(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->model = model;
@@ -38,6 +39,9 @@ Ball::Ball(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	std::cout << "[Ball] VAO: " << VAO << ", VBO_pos: " << VBO_pos << ", EBO: " << EBO << std::endl;
 
 	SetColor();
+
+	World::AddCollisionPair("ball:ball", this, this);
+	World::AddCollisionPair("ball:wall", this, nullptr);
 }
 
 Ball::~Ball() {
