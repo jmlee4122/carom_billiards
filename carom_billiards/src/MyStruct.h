@@ -23,3 +23,8 @@ struct Model {
 	Vertex* normals;
 	size_t normal_count;  // 노말 개수 추가
 };
+
+struct Wall {
+	glm::vec3 start;
+	glm::vec3 end;
+};

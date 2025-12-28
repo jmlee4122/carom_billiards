@@ -30,7 +30,7 @@ void PlayMode::Init() {
 	read_obj_file("./src/assets/models/billiard_collider.obj", m);
 	print_model_info(m);
 	gCollider = new Collider(m);
-	gCollider->PrintMaxAndMin();
+	gCollider->MakeWalls();
 }
 
 void PlayMode::Cleanup() {
