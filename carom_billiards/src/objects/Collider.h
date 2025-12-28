@@ -12,7 +12,6 @@ class Collider
 public:
 	Collider(Model* model);
 	~Collider();
-	void PrintMaxAndMin() const;
 	void MakeWalls();
 
 private:
