@@ -76,14 +76,16 @@ bool World::SphereAndLine(Ball* a, Collider* b) {
 		glm::vec3 startEnd = wall.end - wall.start;
 		// dot (startBall -> startEnd)
 		float dotResult = glm::dot(startEnd, startBall);
+		// length squared of startEnd
+		float lengthSq = startEnd.x * startEnd.x + startEnd.y * startEnd.y + startEnd.z * startEnd.z;
 		// start point -> closest point
-		glm::vec3 startClosest = dotResult * startEnd / 
-			startEnd.x * startEnd.x + startEnd.y * startEnd.y + startEnd.z * startEnd.z;
+		glm::vec3 startClosest = (dotResult / lengthSq) * startEnd;
+		// closest point position
+		glm::vec3 closestPoint = wall.start + startClosest;
 		// ball position -> closest point
-		glm::vec3 ballClosest = startClosest - startBall;
+		glm::vec3 ballClosest = closestPoint - ballPos;
 		// lenght (ball position -> closest point)
-		float distance = 
-			sqrt(ballClosest.x * ballClosest.x + ballClosest.y * ballClosest.y + ballClosest.z * ballClosest.z);
+		float distance = glm::length(ballClosest);
 
 		if (distance <= ballRadius) {
 			glm::vec3 nol = glm::normalize(-ballClosest);

@@ -45,6 +45,7 @@ void PlayMode::HandleEvents(unsigned char key, int x, int y) {
 
 void PlayMode::Update(float dt) {
 	World::Update(dt);
+	World::HandleCollisions();
 }
 
 void PlayMode::Draw(GLuint shaderID) {
