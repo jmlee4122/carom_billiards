@@ -27,12 +27,12 @@ glm::mat4 lightSpaceMatrix;
 unsigned int SCR_WIDTH = 800;
 unsigned int SCR_HEIGHT = 600;
 
-glm::vec3 cameraPos(300.0f, 300.0f, 300.0f);
+glm::vec3 cameraPos(0.0f, 400.0f, 0.0f);
 
 glm::mat4 gViewMat = glm::lookAt(
     cameraPos,
-    glm::vec3(0.0f, 0.0f, 0.0f),
-    glm::vec3(0.0f, 1.0f, 0.0f)
+    glm::vec3(0.0f, 106.0f, 0.0f),
+    glm::vec3(0.0f, 0.0f, 1.0f)
 );
 
 glm::mat4 gProjMat = glm::perspective(

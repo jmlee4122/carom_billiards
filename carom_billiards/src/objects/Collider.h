@@ -19,10 +19,14 @@ public:
 	void Render(GLuint shaderID) override;
 	std::string GetObjectName() override;
 	void HandleCollision(std::string name, GameObject* other) override;
-	void SetCollisionNormal(glm::vec3 nol);
+	void SetIsCollision(int index, bool a);
 
 	std::vector<Wall> GetWalls() const;
-	glm::vec3 GetCollisionNormal() const;
+	
+	float GetMinX() const { return min_x; }
+	float GetMaxX() const { return max_x; }
+	float GetMinZ() const { return min_z; }
+	float GetMaxZ() const { return max_z; }
 
 private:
 	float max_x, max_y, max_z;

@@ -108,6 +108,9 @@ GLvoid Reshape(int w, int h) {
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
     switch (key) {
+    case 'r':
+        
+        break;
     case 'q':
         glutLeaveMainLoop();
     }
@@ -143,7 +146,7 @@ GLvoid Timer(int value) {
     gCurrTime = nextTime;
 
     glutPostRedisplay();
-    glutTimerFunc(16, Timer, 0); // ¾à 60 FPS
+    glutTimerFunc(8, Timer, 0); // ¾à 120 FPS
 }
 
 GLvoid Mouse(int button, int state, int x, int y) {

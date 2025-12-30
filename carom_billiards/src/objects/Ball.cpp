@@ -22,12 +22,14 @@ Ball::Ball(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->vCount = model->vertex_count, this->fCount = model->face_count;
 	this->uColor = glm::vec3(0, 0, 0), this->uAlpha = 1.0f;
 	this->radius = 3.275f;
-	this->position = glm::vec3(0.0f, 110.0f, 60.0f);
+	this->position = glm::vec3(0.0f, 110.0f, 0.0f);
+	this->prevPosition = this->position;
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(1.0f);
-	this->velocity = glm::vec3(pixel_per_cm * 100.0f, 0.0f, pixel_per_cm * 100.0f);
+	this->velocity = glm::vec3(pixel_per_cm * 500.0f, 0.0f, pixel_per_cm * 400.0f);
 	this->modelMat = glm::mat4(1.0f);
 	this->objectName = "ball";
+	this->isWallCollision = false;
 
 	std::cout << "[Ball] Vertex Count: " << vCount << ", Face Count: " << fCount << std::endl;
 
@@ -55,57 +57,55 @@ void Ball::SetColor() {
 	this->uColor = glm::vec3(1.0f, 0.0f, 1.0f);
 }
 
-void Ball::SetPosition(float dt) {
+void Ball::UpdatePosition(float dt) {
+	this->prevPosition = this->position;
 	this->position = this->position + (this->velocity * dt);
 }
-void Ball::SetRotation(float dt) {
+
+void Ball::UpdateRotation(float dt) {
 
 }
+
 void Ball::SetScale() {
 
 }
-void Ball::SetVelocity(float dt) {
 
+void Ball::SetVelocity(glm::vec3 v) {
+	this->velocity = v;
 }
-void Ball::SetModelMat(float dt) {
-	glm::mat4 transMat = glm::translate(glm::mat4(1.0), this->position);
 
-	// ### Test ###
+void Ball::UpdateVelocity(float dt) {
+	float vSize = glm::length(this->velocity);
+	if (vSize <= 0.001f) {
+		this->velocity.x = 0.0f;
+		this->velocity.z = 0.0f;
+		return;
+	}
+	this->velocity.x *= 0.995f;
+	this->velocity.z *= 0.995f;
+}
+
+void Ball::UpdateModelMat(float dt) {
+	glm::mat4 transMat = glm::translate(glm::mat4(1.0), this->position);
 	this->modelMat = transMat;
-	// ### Test ###
 }
 
 void Ball::Update(float dt) {
-	SetVelocity(dt);
-	SetPosition(dt);
-	SetRotation(dt);
+	UpdateVelocity(dt);
+	UpdatePosition(dt);
+	UpdateRotation(dt);
 	SetScale();
-	SetModelMat(dt);
+	UpdateModelMat(dt);
 }
 
 void Ball::Render(GLuint shaderID) {
-	static bool firstRender = true;
-	if (firstRender) {
-		std::cout << "[Ball::Render] ShaderID: " << shaderID
-			<< ", Face Count: " << fCount
-			<< ", Triangle Count: " << (fCount * 3) << std::endl;
-		firstRender = false;
-	}
-
 	glBindVertexArray(VAO);
-
-
-	// 각 쉐이더에 맞는 uniform location을 동적으로 가져옴
 
 	GLint modelLoc = glGetUniformLocation(shaderID, "model");
 	if (modelLoc != -1) {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(this->modelMat));
 	}
-	else {
-		std::cout << "[Ball::Render] WARNING: 'model' uniform not found in shader " << shaderID << std::endl;
-	}
 
-	// Pass 2 (일반 렌더링)일 때만 색상 전송
 	GLint colorLoc = glGetUniformLocation(shaderID, "objectColor");
 	if (colorLoc != -1) {
 		glUniform3fv(colorLoc, 1, glm::value_ptr(uColor));
@@ -118,7 +118,6 @@ void Ball::Render(GLuint shaderID) {
 
 	glDrawElements(GL_TRIANGLES, fCount * 3, GL_UNSIGNED_INT, (void*)(0));
 
-	// OpenGL 에러 체크
 	GLenum err = glGetError();
 	if (err != GL_NO_ERROR) {
 		std::cerr << "[Ball::Render] OpenGL Error: " << err << std::endl;
@@ -137,35 +136,46 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 	}
 	else if (name == "ball:wall") {
 		Collider* wall = static_cast<Collider*>(other);
-		glm::vec3 collisionNol = wall->GetCollisionNormal();
+		std::vector<Wall> walls = wall->GetWalls();
+		glm::vec3 collisionNol = glm::vec3(0, 0, 0);
+
+		for (auto& r : walls) {
+			if (r.isCollide) {
+				collisionNol = r.nol;
+			}
+		}
 
 		if (glm::length(collisionNol) < 0.01f) return;
 
-		std::vector<Wall> walls = wall->GetWalls();
+		float minX = wall->GetMinX();
+		float maxX = wall->GetMaxX();
+		float minZ = wall->GetMinZ();
+		float maxZ = wall->GetMaxZ();
 		
 		if (std::abs(collisionNol.x) > std::abs(collisionNol.z)) {
 			if (collisionNol.x > 0) {
-				this->position.x = walls[3].start.x + this->radius;
+				this->position.x = minX + this->radius;
 			}
 			else {
-				this->position.x = walls[1].start.x - this->radius;
+				this->position.x = maxX - this->radius;
 			}
-			this->velocity.x *= -1.0f;
+			this->velocity.x *= -0.95f;
 		}
 		else {
+			float centerZ = (minZ + maxZ) / 2.0f;
+			
 			if (collisionNol.z > 0) {
-				this->position.z = walls[0].start.z + this->radius;
+				this->position.z = minZ + this->radius;
 			}
 			else {
-				this->position.z = walls[2].start.z - this->radius;
+				this->position.z = maxZ - this->radius;
 			}
-			this->velocity.z *= -1.0f;
+			this->velocity.z *= -0.95f;
 		}
 		
-		SetModelMat(0.0f);
-	}
-	else {
-		return;
+		this->prevPosition = this->position;
+
+		UpdateModelMat(0.0f);
 	}
 }
 
@@ -173,6 +183,18 @@ glm::vec3 Ball::GetPosition() const {
 	return this->position;
 }
 
+glm::vec3 Ball::GetPrevPosition() const {
+	return this->prevPosition;
+}
+
 float Ball::GetRadius() const {
 	return this->radius;
+}
+
+void Ball::SetIsWallCollision(bool a) {
+	this->isWallCollision = a;
+}
+
+bool Ball::GetIsWallCollision() {
+	return this->isWallCollision;
 }

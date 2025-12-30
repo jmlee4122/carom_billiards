@@ -18,15 +18,19 @@ public:
     void Render(GLuint shaderID) override;
     void HandleCollision(std::string name, GameObject* other) override;
 
-    void SetPosition(float dt);
-    void SetRotation(float dt);
+    void UpdatePosition(float dt);
+    void UpdateRotation(float dt);
     void SetScale();
-    void SetVelocity(float dt);
-    void SetModelMat(float dt);
+    void SetVelocity(glm::vec3 v);
+    void UpdateVelocity(float dt);
+    void UpdateModelMat(float dt);
     std::string GetObjectName() override;
 
     glm::vec3 GetPosition() const;
+    glm::vec3 GetPrevPosition() const;
     float GetRadius() const;
+    void SetIsWallCollision(bool a);
+    bool GetIsWallCollision();
 
 private:
     Model* model;
@@ -37,11 +41,13 @@ private:
     float radius;
 
     glm::vec3 position;
+    glm::vec3 prevPosition;
     glm::vec3 rotation;
     glm::vec3 scale;
     glm::vec3 velocity;
     glm::mat4 modelMat;
 
     std::string objectName;
+    bool isWallCollision;
 };
 

@@ -63,6 +63,11 @@ void Collider::MakeWalls() {
 		std::cout << i << " end point   : ";
 		std::cout << this->walls[i].end.x << " " << this->walls[i].end.y << " " << this->walls[i].end.z << std::endl;
 	}
+
+	this->walls[0].nol = glm::vec3(0, 0, 1);
+	this->walls[1].nol = glm::vec3(-1, 0, 0);
+	this->walls[2].nol = glm::vec3(0, 0, -1);
+	this->walls[3].nol = glm::vec3(1, 0, 0);
 }
 
 void Collider::Update(float dt) {
@@ -81,14 +86,10 @@ void Collider::HandleCollision(std::string name, GameObject* other) {
 
 }
 
-void Collider::SetCollisionNormal(glm::vec3 nol) {
-	this->collisionNormal = nol;
+void Collider::SetIsCollision(int index, bool a) {
+	this->walls[index].isCollide = a;
 }
 
 std::vector<Wall> Collider::GetWalls() const {
 	return this->walls;
-}
-
-glm::vec3 Collider::GetCollisionNormal() const {
-	return this->collisionNormal;
 }

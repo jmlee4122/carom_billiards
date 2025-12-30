@@ -29,6 +29,8 @@ struct Model {
 struct Wall {
 	glm::vec3 start;
 	glm::vec3 end;
+	glm::vec3 nol;
+	bool isCollide;
 };
 
 struct CollisionPair {

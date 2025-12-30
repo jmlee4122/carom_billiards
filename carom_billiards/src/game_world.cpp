@@ -69,41 +69,34 @@ bool World::SphereAndLine(Ball* a, Collider* b) {
 	float ballRadius = a->GetRadius();
 	std::vector<Wall> walls = b->GetWalls();
 
-	for (auto& wall : walls) {
+	for (size_t wallIndex = 0; wallIndex < walls.size(); ++wallIndex) {
+		auto& wall = walls[wallIndex];
+		
 		glm::vec2 ballPos2D = glm::vec2(ballPos.x, ballPos.z);
-		glm::vec2 wallStart = glm::vec2(wall.start.x, wall.start.z);
-		glm::vec2 wallEnd = glm::vec2(wall.end.x, wall.end.z);
+		glm::vec2 wallStart2D = glm::vec2(wall.start.x, wall.start.z);
+		glm::vec2 wallEnd2D = glm::vec2(wall.end.x, wall.end.z);
 
-		glm::vec2 wallDir = wallEnd - wallStart;
+		glm::vec2 wallDir = wallEnd2D - wallStart2D;
 		float wallLengthSq = glm::dot(wallDir, wallDir);
 
 		if (wallLengthSq < 0.0001f) continue;
 
-		glm::vec2 startToBall = ballPos2D - wallStart;
+		glm::vec2 startToBall = ballPos2D - wallStart2D;
 		float t = glm::dot(startToBall, wallDir) / wallLengthSq;
-
 		t = glm::clamp(t, 0.0f, 1.0f);
-
-		glm::vec2 closestPoint = wallStart + t * wallDir;
-
+		
+		glm::vec2 closestPoint = wallStart2D + t * wallDir;
 		float distance = glm::length(ballPos2D - closestPoint);
 
 		if (distance <= ballRadius) {
-			glm::vec2 collisionDir = glm::normalize(ballPos2D - closestPoint);
-			
-			glm::vec3 nol;
-			if (std::abs(collisionDir.x) > std::abs(collisionDir.y)) {
-				nol = glm::vec3(collisionDir.x > 0 ? 1.0f : -1.0f, 0.0f, 0.0f);
-			}
-			else {
-				nol = glm::vec3(0.0f, 0.0f, collisionDir.y > 0 ? 1.0f : -1.0f);
-			}
-			
-			b->SetCollisionNormal(nol);
+			b->SetIsCollision(wallIndex, true);
 			return true;
 		}
 	}
-	b->SetCollisionNormal(glm::vec3(0, 0, 0));
+	
+	for (int wallIndex = 0; wallIndex < 4; wallIndex++) {
+		b->SetIsCollision(wallIndex, false);
+	}
 	return false;
 }
 
