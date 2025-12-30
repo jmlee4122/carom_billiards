@@ -129,6 +129,11 @@ GLvoid Timer(int value) {
     int nextTime = glutGet(GLUT_ELAPSED_TIME);
     float deltaTime = (float)(nextTime - gCurrTime) / 1000.0f;
 
+    const float MAX_DELTA_TIME = 0.1f;
+    if (deltaTime > MAX_DELTA_TIME) {
+        deltaTime = MAX_DELTA_TIME;
+    }
+
     if (!gModeStack.empty()) {
         for (auto r : gModeStack) {
             r->Update(deltaTime);

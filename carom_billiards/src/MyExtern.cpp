@@ -60,6 +60,6 @@ std::vector<GameMode*> gModeStack;
 
 int gCurrTime = 0;
 float pixel_per_mm = 0.1f;
-float pixel_per_cm = pixel_per_mm / 10.0f;
+float pixel_per_cm = pixel_per_mm * 10.0f;
 
 std::vector<CollisionPair> gPairs;

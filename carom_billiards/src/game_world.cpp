@@ -60,7 +60,7 @@ bool World::CheckCollision(const std::string& pairName, GameObject* a, GameObjec
 }
 
 bool World::Spheres(Ball* a, Ball* b) {
-	// 동일한 공 충돌 검사 제외
+	// 구와 구 충돌 검사 로직
 	return false;
 }
 
@@ -70,25 +70,35 @@ bool World::SphereAndLine(Ball* a, Collider* b) {
 	std::vector<Wall> walls = b->GetWalls();
 
 	for (auto& wall : walls) {
-		// start point -> ball position
-		glm::vec3 startBall = ballPos - wall.start;
-		// start point -> end point
-		glm::vec3 startEnd = wall.end - wall.start;
-		// dot (startBall -> startEnd)
-		float dotResult = glm::dot(startEnd, startBall);
-		// length squared of startEnd
-		float lengthSq = startEnd.x * startEnd.x + startEnd.y * startEnd.y + startEnd.z * startEnd.z;
-		// start point -> closest point
-		glm::vec3 startClosest = (dotResult / lengthSq) * startEnd;
-		// closest point position
-		glm::vec3 closestPoint = wall.start + startClosest;
-		// ball position -> closest point
-		glm::vec3 ballClosest = closestPoint - ballPos;
-		// lenght (ball position -> closest point)
-		float distance = glm::length(ballClosest);
+		glm::vec2 ballPos2D = glm::vec2(ballPos.x, ballPos.z);
+		glm::vec2 wallStart = glm::vec2(wall.start.x, wall.start.z);
+		glm::vec2 wallEnd = glm::vec2(wall.end.x, wall.end.z);
+
+		glm::vec2 wallDir = wallEnd - wallStart;
+		float wallLengthSq = glm::dot(wallDir, wallDir);
+
+		if (wallLengthSq < 0.0001f) continue;
+
+		glm::vec2 startToBall = ballPos2D - wallStart;
+		float t = glm::dot(startToBall, wallDir) / wallLengthSq;
+
+		t = glm::clamp(t, 0.0f, 1.0f);
+
+		glm::vec2 closestPoint = wallStart + t * wallDir;
+
+		float distance = glm::length(ballPos2D - closestPoint);
 
 		if (distance <= ballRadius) {
-			glm::vec3 nol = glm::normalize(-ballClosest);
+			glm::vec2 collisionDir = glm::normalize(ballPos2D - closestPoint);
+			
+			glm::vec3 nol;
+			if (std::abs(collisionDir.x) > std::abs(collisionDir.y)) {
+				nol = glm::vec3(collisionDir.x > 0 ? 1.0f : -1.0f, 0.0f, 0.0f);
+			}
+			else {
+				nol = glm::vec3(0.0f, 0.0f, collisionDir.y > 0 ? 1.0f : -1.0f);
+			}
+			
 			b->SetCollisionNormal(nol);
 			return true;
 		}

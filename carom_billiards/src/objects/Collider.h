@@ -22,6 +22,7 @@ public:
 	void SetCollisionNormal(glm::vec3 nol);
 
 	std::vector<Wall> GetWalls() const;
+	glm::vec3 GetCollisionNormal() const;
 
 private:
 	float max_x, max_y, max_z;

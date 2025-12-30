@@ -88,3 +88,7 @@ void Collider::SetCollisionNormal(glm::vec3 nol) {
 std::vector<Wall> Collider::GetWalls() const {
 	return this->walls;
 }
+
+glm::vec3 Collider::GetCollisionNormal() const {
+	return this->collisionNormal;
+}

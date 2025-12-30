@@ -10,6 +10,7 @@
 #include <gl/glm/gtc/matrix_transform.hpp>
 
 #include "Ball.h"
+#include "Collider.h"
 
 #include "../MyExtern.h"
 #include "../MyStruct.h"
@@ -24,7 +25,7 @@ Ball::Ball(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->position = glm::vec3(0.0f, 110.0f, 60.0f);
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(1.0f);
-	this->velocity = glm::vec3(0.0f);
+	this->velocity = glm::vec3(pixel_per_cm * 100.0f, 0.0f, pixel_per_cm * 100.0f);
 	this->modelMat = glm::mat4(1.0f);
 	this->objectName = "ball";
 
@@ -55,7 +56,7 @@ void Ball::SetColor() {
 }
 
 void Ball::SetPosition(float dt) {
-
+	this->position = this->position + (this->velocity * dt);
 }
 void Ball::SetRotation(float dt) {
 
@@ -75,10 +76,10 @@ void Ball::SetModelMat(float dt) {
 }
 
 void Ball::Update(float dt) {
+	SetVelocity(dt);
 	SetPosition(dt);
 	SetRotation(dt);
 	SetScale();
-	SetVelocity(dt);
 	SetModelMat(dt);
 }
 
@@ -131,7 +132,41 @@ std::string Ball::GetObjectName() {
 }
 
 void Ball::HandleCollision(std::string name, GameObject* other) {
+	if (name == "ball:ball") {
 
+	}
+	else if (name == "ball:wall") {
+		Collider* wall = static_cast<Collider*>(other);
+		glm::vec3 collisionNol = wall->GetCollisionNormal();
+
+		if (glm::length(collisionNol) < 0.01f) return;
+
+		std::vector<Wall> walls = wall->GetWalls();
+		
+		if (std::abs(collisionNol.x) > std::abs(collisionNol.z)) {
+			if (collisionNol.x > 0) {
+				this->position.x = walls[3].start.x + this->radius;
+			}
+			else {
+				this->position.x = walls[1].start.x - this->radius;
+			}
+			this->velocity.x *= -1.0f;
+		}
+		else {
+			if (collisionNol.z > 0) {
+				this->position.z = walls[0].start.z + this->radius;
+			}
+			else {
+				this->position.z = walls[2].start.z - this->radius;
+			}
+			this->velocity.z *= -1.0f;
+		}
+		
+		SetModelMat(0.0f);
+	}
+	else {
+		return;
+	}
 }
 
 glm::vec3 Ball::GetPosition() const {

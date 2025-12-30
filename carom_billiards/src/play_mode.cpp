@@ -16,23 +16,21 @@
 void PlayMode::Init() {
 	Model* m = new Model;
 	read_obj_file("./src/assets/models/billiard_table.obj", m);
-	print_model_info(m);
 	World::AddObject(std::make_shared<Table>(m));
 
 	read_obj_file("./src/assets/models/billiard_plane.obj", m);
-	print_model_info(m);
 	World::AddObject(std::make_shared<Plane>(m));
 
 	read_obj_file("./src/assets/models/billiard_ball.obj", m);
-	print_model_info(m);
 	World::AddObject(std::make_shared<Ball>(m));
 
 	read_obj_file("./src/assets/models/billiard_collider.obj", m);
-	print_model_info(m);
 	gCollider = new Collider(m);
 	gCollider->MakeWalls();
 
 	PrintCollisionPairs();
+
+	gCurrTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 void PlayMode::Cleanup() {
