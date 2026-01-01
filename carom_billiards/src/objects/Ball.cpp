@@ -17,7 +17,7 @@
 #include "../MyUtils.h"
 #include "../game_world.h"
 
-Ball::Ball(Model* model, glm::vec3 pos) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
+Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->model = model;
 	this->vCount = model->vertex_count, this->fCount = model->face_count;
 	this->uColor = glm::vec3(0, 0, 0), this->uAlpha = 1.0f;
@@ -26,7 +26,7 @@ Ball::Ball(Model* model, glm::vec3 pos) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0)
 	this->prevPosition = this->position;
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(1.0f);
-	this->velocity = glm::vec3(pixel_per_cm * 500.0f, 0.0f, pixel_per_cm * 400.0f);
+	this->velocity = v;
 	this->modelMat = glm::mat4(1.0f);
 	this->objectName = "ball";
 	this->isWallCollision = false;
@@ -132,7 +132,51 @@ std::string Ball::GetObjectName() {
 
 void Ball::HandleCollision(std::string name, GameObject* other) {
 	if (name == "ball:ball") {
-
+		Ball* ball = static_cast<Ball*>(other);
+		
+		// 두 공 사이의 거리 벡터 계산
+		glm::vec3 delta = this->position - ball->GetPosition();
+		float distance = glm::length(delta);
+		
+		// 이미 처리된 충돌이거나 충돌하지 않은 경우 무시
+		if (distance < 0.001f || distance >= (this->radius + ball->GetRadius())) {
+			return;
+		}
+		
+		// 충돌 법선 벡터
+		glm::vec3 normal = glm::normalize(delta);
+		
+		// 위치 보정 - 겹침 제거
+		float overlap = (this->radius + ball->GetRadius()) - distance;
+		this->position += normal * (overlap * 0.5f);
+		ball->position -= normal * (overlap * 0.5f);
+		
+		// 상대 속도 계산
+		glm::vec3 relativeVelocity = this->velocity - ball->velocity;
+		float velocityAlongNormal = glm::dot(relativeVelocity, normal);
+		
+		// 이미 분리 중이면 처리하지 않음
+		if (velocityAlongNormal > 0) {
+			return;
+		}
+		
+		// 탄성 충돌 계수 (0.95 = 약간의 에너지 손실)
+		float restitution = 0.95f;
+		
+		// 충돌 임펄스 크기 계산 (두 공의 질량이 같다고 가정)
+		float impulseScalar = -(1.0f + restitution) * velocityAlongNormal;
+		impulseScalar /= 2.0f; // 질량이 같으므로 1/m1 + 1/m2 = 2/m
+		
+		// 임펄스 벡터
+		glm::vec3 impulse = impulseScalar * normal;
+		
+		// 속도 업데이트
+		this->velocity += impulse;
+		ball->velocity -= impulse;
+		
+		// 이전 위치도 업데이트하여 다음 프레임에서 재충돌 방지
+		this->prevPosition = this->position;
+		ball->prevPosition = ball->position;
 	}
 	else if (name == "ball:wall") {
 		Collider* wall = static_cast<Collider*>(other);
