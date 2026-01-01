@@ -60,7 +60,15 @@ bool World::CheckCollision(const std::string& pairName, GameObject* a, GameObjec
 }
 
 bool World::Spheres(Ball* a, Ball* b) {
-	// 备客 备 面倒 八荤 肺流
+	glm::vec3 firstPos = a->GetPosition();
+	glm::vec3 secondPos = b->GetPosition();
+
+	float r = a->GetRadius();
+
+	float distance = glm::length(firstPos - secondPos);
+	if (distance <= 2.5 * r) {
+		return true;
+	}
 	return false;
 }
 

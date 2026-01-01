@@ -11,7 +11,7 @@ struct Model;
 class Ball : public GameObject
 {
 public:
-    Ball(Model* model);
+    Ball(Model* model, glm::vec3 pos);
     ~Ball() override;
     void SetColor();
     void Update(float dt) override;

@@ -22,7 +22,8 @@ void PlayMode::Init() {
 	World::AddObject(std::make_shared<Plane>(m));
 
 	read_obj_file("./src/assets/models/billiard_ball.obj", m);
-	World::AddObject(std::make_shared<Ball>(m));
+	World::AddObject(std::make_shared<Ball>(m, glm::vec3(0, 110, 0)));
+	World::AddObject(std::make_shared<Ball>(m, glm::vec3(100, 110, 50)));
 
 	read_obj_file("./src/assets/models/billiard_collider.obj", m);
 	gCollider = new Collider(m);

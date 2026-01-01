@@ -17,12 +17,12 @@
 #include "../MyUtils.h"
 #include "../game_world.h"
 
-Ball::Ball(Model* model) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
+Ball::Ball(Model* model, glm::vec3 pos) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->model = model;
 	this->vCount = model->vertex_count, this->fCount = model->face_count;
 	this->uColor = glm::vec3(0, 0, 0), this->uAlpha = 1.0f;
 	this->radius = 3.275f;
-	this->position = glm::vec3(0.0f, 110.0f, 0.0f);
+	this->position = pos;
 	this->prevPosition = this->position;
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(1.0f);
