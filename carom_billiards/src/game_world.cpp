@@ -135,7 +135,7 @@ void World::HandleCollisions() {
 
 			for (GameObject* b : groupB) {
 				if (b == nullptr) continue;
-
+				if (a == b) continue;
 				if (World::CheckCollision(name, a, b)) {
 					a->HandleCollision(name, b);
 					b->HandleCollision(name, a);

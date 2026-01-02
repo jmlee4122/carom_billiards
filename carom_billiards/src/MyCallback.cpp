@@ -107,13 +107,10 @@ GLvoid Reshape(int w, int h) {
 }
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
-    switch (key) {
-    case 'r':
-        
-        break;
-    case 'q':
-        glutLeaveMainLoop();
+    if (!gModeStack.empty()) {
+        gModeStack.back()->HandleEvents(key, x, y);
     }
+    glutPostRedisplay();
 }
 
 GLvoid KeyboardUp(unsigned char key, int x, int y) {

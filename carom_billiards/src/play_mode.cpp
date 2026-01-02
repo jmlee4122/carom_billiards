@@ -52,7 +52,10 @@ void PlayMode::Cleanup() {
 }
 
 void PlayMode::HandleEvents(unsigned char key, int x, int y) {
-
+	switch (key) {
+	case 'q':
+		glutLeaveMainLoop();
+	}
 }
 
 void PlayMode::Update(float dt) {
