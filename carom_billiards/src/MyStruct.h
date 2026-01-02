@@ -37,3 +37,15 @@ struct CollisionPair {
 	std::string pairName;
 	std::vector<GameObject*> objects[2];
 };
+
+struct GameScore {
+	std::string cueBallColor;
+	int whiteScore;
+	int yellowScore;
+};
+
+struct CollisionInfo {
+	unsigned int cntRed;
+	unsigned int cntWhite;
+	unsigned int cntYellow;
+};

@@ -11,7 +11,7 @@ struct Model;
 class Ball : public GameObject
 {
 public:
-    Ball(Model* model, glm::vec3 pos, glm::vec3 v);
+    Ball(Model* model, glm::vec3 pos, glm::vec3 v, std::string color);
     ~Ball() override;
     void SetColor();
     void Update(float dt) override;
@@ -25,9 +25,11 @@ public:
     void UpdateVelocity(float dt);
     void UpdateModelMat(float dt);
     std::string GetObjectName() override;
+    std::string GetColor();
 
     glm::vec3 GetPosition() const;
     glm::vec3 GetPrevPosition() const;
+    glm::vec3 GetVelocity() const;
     float GetRadius() const;
     void SetIsWallCollision(bool a);
     bool GetIsWallCollision();
@@ -48,6 +50,8 @@ private:
     glm::mat4 modelMat;
 
     std::string objectName;
-    bool isWallCollision;
+    std::string color;
+    bool isWallCollision; // ball:wall
+    bool hasCollided; // ball:ball
 };
 

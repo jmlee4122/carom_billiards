@@ -20,6 +20,7 @@
 #include "MyExtern.h"
 
 #include "./objects/GameObject.h"
+#include "./objects/Ball.h"
 
 void read_newline(char* str) {
 	char* pos;
@@ -306,5 +307,34 @@ void PrintCollisionPairs() {
 			std::cout << (gPairs[i].objects[1])[j]->GetObjectName() << std::endl;
 		}
 		std::cout << std::endl;
+	}
+}
+
+bool IsNextTurn() {
+	if (gHasReady == false) {
+		unsigned int cntHasStopped = 0;
+		for (const auto& r : world) {
+			if (r->GetObjectName() == "ball") {
+				Ball* ball = static_cast<Ball*>(r.get());
+				if (glm::length(ball->GetVelocity()) <= 0.001f) {
+					cntHasStopped++;
+				}
+			}
+		}
+		if (cntHasStopped == 4) {
+			gHasReady = true;
+			std::cout << "==== [debug] is ready to next ====" << std::endl;
+			return true;
+		}
+	}
+	return false;
+}
+
+void ChangeCueBallColor() {
+	if (gScore.cueBallColor == "white") {
+		gScore.cueBallColor = "yellow";
+	}
+	else {
+		gScore.cueBallColor = "white";
 	}
 }

@@ -17,7 +17,7 @@
 #include "../MyUtils.h"
 #include "../game_world.h"
 
-Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
+Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v, std::string color) : VAO(0), VBO_pos(0), VBO_nol(0), EBO(0) {
 	this->model = model;
 	this->vCount = model->vertex_count, this->fCount = model->face_count;
 	this->uColor = glm::vec3(0, 0, 0), this->uAlpha = 1.0f;
@@ -29,7 +29,9 @@ Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v) : VAO(0), VBO_pos(0), VBO_n
 	this->velocity = v;
 	this->modelMat = glm::mat4(1.0f);
 	this->objectName = "ball";
+	this->color = color;
 	this->isWallCollision = false;
+	this->hasCollided = false;
 
 	std::cout << "[Ball] Vertex Count: " << vCount << ", Face Count: " << fCount << std::endl;
 
@@ -54,7 +56,19 @@ Ball::~Ball() {
 }
 
 void Ball::SetColor() {
-	this->uColor = glm::vec3(1.0f, 0.0f, 1.0f);
+	if (this->color == "red") {
+		this->uColor = glm::vec3(1.0f, 0.0f, 0.0f);
+	}
+	else if (this->color == "white") {
+		this->uColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	}
+	else if (this->color == "yellow") {
+		this->uColor = glm::vec3(1.0f, 1.0f, 0.0f);
+	}
+	else {
+		std::cerr << "ERROR: Invalid ball color '" << this->color << "'. Program will exit." << std::endl;
+		exit(EXIT_FAILURE);
+	}
 }
 
 void Ball::UpdatePosition(float dt) {
@@ -76,7 +90,7 @@ void Ball::SetVelocity(glm::vec3 v) {
 
 void Ball::UpdateVelocity(float dt) {
 	float vSize = glm::length(this->velocity);
-	if (vSize <= 0.001f) {
+	if (vSize <= 0.1f) {
 		this->velocity.x = 0.0f;
 		this->velocity.z = 0.0f;
 		return;
@@ -166,6 +180,22 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 		
 		this->prevPosition = this->position;
 		ball->prevPosition = ball->position;
+
+		if (this->color == "red" && this->hasCollided == false) {
+			if (ball->GetColor() == gScore.cueBallColor) {
+				gCollisionInfo.cntRed++;
+			}
+		}
+		else if (this->color == "white" && this->color == gScore.cueBallColor) {
+			if (ball->GetColor() == "yellow") {
+				gCollisionInfo.cntYellow++;
+			}
+		}
+		else if (this->color == "yellow" && this->color == gScore.cueBallColor) {
+			if (ball->GetColor() == "white") {
+				gCollisionInfo.cntWhite++;
+			}
+		}
 	}
 	else if (name == "ball:wall") {
 		Collider* wall = static_cast<Collider*>(other);
@@ -230,4 +260,12 @@ void Ball::SetIsWallCollision(bool a) {
 
 bool Ball::GetIsWallCollision() {
 	return this->isWallCollision;
+}
+
+std::string Ball::GetColor() {
+	return this->color;
+}
+
+glm::vec3 Ball::GetVelocity() const {
+	return this->velocity;
 }

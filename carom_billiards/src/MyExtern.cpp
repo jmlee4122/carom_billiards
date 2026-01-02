@@ -9,6 +9,8 @@
 
 #include "./objects/GameObject.h"
 
+class Ball;
+
 GLuint vertexShader;
 GLuint fragmentShader;
 GLuint shaderProgramID;
@@ -32,7 +34,7 @@ glm::vec3 cameraPos(0.0f, 400.0f, 0.0f);
 glm::mat4 gViewMat = glm::lookAt(
     cameraPos,
     glm::vec3(0.0f, 106.0f, 0.0f),
-    glm::vec3(0.0f, 0.0f, 1.0f)
+    glm::vec3(0.0f, 0.0f, -1.0f)
 );
 
 glm::mat4 gProjMat = glm::perspective(
@@ -63,3 +65,8 @@ float pixel_per_mm = 0.1f;
 float pixel_per_cm = pixel_per_mm * 10.0f;
 
 std::vector<CollisionPair> gPairs;
+
+GameScore gScore;
+CollisionInfo gCollisionInfo;
+
+bool gHasReady = false;
