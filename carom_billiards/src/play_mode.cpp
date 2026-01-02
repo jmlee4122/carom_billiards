@@ -25,7 +25,7 @@ void PlayMode::Init() {
 	float dia = 244.0f / 8.0f;
 	World::AddObject(std::make_shared<Ball>(m, glm::vec3(-2 * dia, 110, 0), glm::vec3(0, 0, 0), "red"));
 	World::AddObject(std::make_shared<Ball>(m, glm::vec3(2 * dia, 110, 0), glm::vec3(0, 0, 0), "red"));
-	World::AddObject(std::make_shared<Ball>(m, glm::vec3(2 * dia, 110, -0.5 * dia), 50.0f * glm::vec3(-pixel_per_cm * 8.0, 0, pixel_per_cm * 1.3f), "white"));
+	World::AddObject(std::make_shared<Ball>(m, glm::vec3(2 * dia, 110, -0.5 * dia), glm::vec3(0, 0, 0), "white"));
 	World::AddObject(std::make_shared<Ball>(m, glm::vec3(-3 * dia, 110, 0), glm::vec3(0, 0, 0), "yellow"));
 
 	read_obj_file("./src/assets/models/billiard_collider.obj", m);
@@ -53,9 +53,21 @@ void PlayMode::Cleanup() {
 
 void PlayMode::HandleEvents(unsigned char key, int x, int y) {
 	switch (key) {
+	case 'r':
+		gHasReady = false;
+		for (const auto& r : world) {
+			if (r->GetObjectName() == "ball") {
+				Ball* ball = static_cast<Ball*>(r.get());
+				if (ball->GetColor() == gScore.cueBallColor) {
+					ball->SetVelocity(glm::vec3(50.0f * glm::vec3(-pixel_per_cm * 8.0, 0, pixel_per_cm * 1.3f)));
+				}
+			}
+		}
+		break;
 	case 'q':
 		glutLeaveMainLoop();
 	}
+	glutSwapBuffers();
 }
 
 void PlayMode::Update(float dt) {

@@ -153,44 +153,10 @@ std::string Ball::GetObjectName() {
 
 void Ball::HandleCollision(std::string name, GameObject* other) {
 	if (name == "ball:ball") {
-		//Ball* ball = static_cast<Ball*>(other);
-		//
-		//glm::vec3 delta = this->position - ball->GetPosition();
-		//float distance = glm::length(delta);
-		//
-		//if (distance < 0.001f || distance >= (this->radius + ball->GetRadius())) {
-		//	return;
-		//}
-		//
-		//glm::vec3 normal = glm::normalize(delta);
-		//
-		//float overlap = (this->radius + ball->GetRadius()) - distance;
-		//this->position += normal * (overlap * 0.5f);
-		//ball->position -= normal * (overlap * 0.5f);
-		//
-		//glm::vec3 relativeVelocity = this->velocity - ball->velocity;
-		//float velocityAlongNormal = glm::dot(relativeVelocity, normal);
-		//
-		//if (velocityAlongNormal > 0) {
-		//	return;
-		//}
-		//
-		//float restitution = 0.95f;
-		//
-		//float impulseScalar = -(1.0f + restitution) * velocityAlongNormal;
-		//impulseScalar /= 2.0f;
-		//
-		//glm::vec3 impulse = impulseScalar * normal;
-		//
-		//this->velocity += impulse;
-		//ball->velocity -= impulse;
-		//
-		//this->prevPosition = this->position;
-		//ball->prevPosition = ball->position;
 		Ball* ball = static_cast<Ball*>(other);
 
 		glm::vec3 delta = this->position - ball->GetPosition();
-		float distance = glm::length(delta);  // 여기 이미 선언되어 있음
+		float distance = glm::length(delta);
 
 		if (distance < 0.001f || distance >= (this->radius + ball->GetRadius())) {
 			return;
@@ -200,7 +166,6 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 
 		float overlap = (this->radius + ball->GetRadius()) - distance;
 		this->position += normal * (overlap * 0.5f);
-		// ball->position -= normal * (overlap * 0.5f);  // 제거 (상대방 수정 금지)
 
 		glm::vec3 relativeVelocity = this->velocity - ball->velocity;
 		float velocityAlongNormal = glm::dot(relativeVelocity, normal);
@@ -209,31 +174,31 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 			return;
 		}
 
-		float restitution = 0.95f;  // 여기 선언되어 있음
-
+		float restitution = 0.95f;
 		float impulseScalar = -(1.0f + restitution) * velocityAlongNormal;
 		impulseScalar /= 2.0f;
 
 		glm::vec3 impulse = impulseScalar * normal;
 
 		this->velocity += impulse;
-		// ball->velocity -= impulse;  // 제거 (상대방 수정 금지)
-
 		this->prevPosition = this->position;
 
 		if (this->color == "red" && this->hasCollided == false) {
 			if (ball->GetColor() == gScore.cueBallColor) {
 				gCollisionInfo.cntRed++;
+				this->hasCollided = true;
 			}
 		}
-		else if (this->color == "white" && this->color == gScore.cueBallColor) {
+		else if (this->color == "white" && this->color != gScore.cueBallColor && this->hasCollided == false) {
 			if (ball->GetColor() == "yellow") {
-				gCollisionInfo.cntYellow++;
+				gCollisionInfo.cntWhite++;
+				this->hasCollided = true;
 			}
 		}
-		else if (this->color == "yellow" && this->color == gScore.cueBallColor) {
+		else if (this->color == "yellow" && this->color != gScore.cueBallColor && this->hasCollided == false) {
 			if (ball->GetColor() == "white") {
-				gCollisionInfo.cntWhite++;
+				gCollisionInfo.cntYellow++;
+				this->hasCollided = true;
 			}
 		}
 	}
@@ -315,4 +280,8 @@ void Ball::SetIsCueBall(bool a) {
 }
 bool Ball::GetIsCueBall() const {
 	return this->isCueBall;
+}
+
+void Ball::SetHasCollided(bool a) {
+	this->hasCollided = a;
 }

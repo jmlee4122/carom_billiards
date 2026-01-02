@@ -341,6 +341,18 @@ void ChangeCueBallColor() {
 
 void SetScore() {
 	if (IsNextTurn()) {
+		std::cout << "==== [debug] collision information ====" << std::endl;
+		std::cout << "# red : " << gCollisionInfo.cntRed << std::endl;
+		std::cout << "# white : " << gCollisionInfo.cntWhite << std::endl;
+		std::cout << "# yellow : " << gCollisionInfo.cntYellow << std::endl;
+
+		for (const auto& r : world) {
+			if (r->GetObjectName() == "ball") {
+				Ball* ball = static_cast<Ball*>(r.get());
+				ball->SetHasCollided(false);
+			}
+		}
+
 		unsigned int red = gCollisionInfo.cntRed;
 		unsigned int other = 0;
 		int score = 0;
@@ -379,6 +391,10 @@ void SetScore() {
 			}
 			ChangeCueBallColor();
 		}
+		gCollisionInfo.cntRed = 0;
+		gCollisionInfo.cntWhite = 0;
+		gCollisionInfo.cntYellow = 0;
+
 		SetCueBall();
 	}
 }

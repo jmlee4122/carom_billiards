@@ -69,4 +69,4 @@ std::vector<CollisionPair> gPairs;
 GameScore gScore;
 CollisionInfo gCollisionInfo;
 
-bool gHasReady = false;
+bool gHasReady = true;

@@ -33,6 +33,7 @@ public:
     float GetRadius() const;
     void SetIsWallCollision(bool a);
     bool GetIsWallCollision() const;
+    void SetHasCollided(bool a);
     void SetIsCueBall(bool a);
     bool GetIsCueBall() const;
 
