@@ -338,3 +338,46 @@ void ChangeCueBallColor() {
 		gScore.cueBallColor = "white";
 	}
 }
+
+void SetScore() {
+	if (IsNextTurn()) {
+		unsigned int red = gCollisionInfo.cntRed;
+		unsigned int other = 0;
+		int score = 0;
+
+		if (gScore.cueBallColor == "white") {
+			other = gCollisionInfo.cntYellow;
+			score = gScore.whiteScore;
+		}
+		else if (gScore.cueBallColor == "yellow") {
+			other = gCollisionInfo.cntWhite;
+			score = gScore.yellowScore;
+		}
+
+		// get a point
+		if (red == 2 && other == 0) {
+			score++;
+			if (gScore.cueBallColor == "white") {
+				gScore.whiteScore = score;
+			}
+			else if (gScore.cueBallColor == "yellow") {
+				gScore.yellowScore = score;
+			}
+		}
+		// pass
+		else if (red == 1 && other == 0) {
+			ChangeCueBallColor();
+		}
+		// concede a point
+		else if (red == 0 || other >= 1) {
+			score--;
+			if (gScore.cueBallColor == "white") {
+				gScore.whiteScore = score;
+			}
+			else if (gScore.cueBallColor == "yellow") {
+				gScore.yellowScore = score;
+			}
+			ChangeCueBallColor();
+		}
+	}
+}
