@@ -24,3 +24,4 @@ void PrintCollisionPairs();
 bool IsNextTurn();
 void ChangeCueBallColor();
 void SetScore();
+void SetCueBall();

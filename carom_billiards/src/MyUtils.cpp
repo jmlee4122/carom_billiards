@@ -323,7 +323,7 @@ bool IsNextTurn() {
 		}
 		if (cntHasStopped == 4) {
 			gHasReady = true;
-			std::cout << "==== [debug] is ready to next ====" << std::endl;
+			// std::cout << "==== [debug] is ready to next ====" << std::endl;
 			return true;
 		}
 	}
@@ -378,6 +378,24 @@ void SetScore() {
 				gScore.yellowScore = score;
 			}
 			ChangeCueBallColor();
+		}
+		SetCueBall();
+	}
+}
+
+void SetCueBall() {
+	std::cout << "==== [debug] cue ball's color ====" << std::endl;
+	for (const auto& r : world) {
+		if (r->GetObjectName() == "ball") {
+			Ball* ball = static_cast<Ball*>(r.get());
+			if (ball->GetColor() == gScore.cueBallColor) {
+				ball->SetIsCueBall(true);
+			}
+			else {
+				ball->SetIsCueBall(false);
+			}
+			std::cout << "# color : " << ball->GetColor();
+			std::cout << " / # is cue ball : " << ball->GetIsCueBall() << std::endl;
 		}
 	}
 }

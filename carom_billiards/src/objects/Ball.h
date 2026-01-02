@@ -32,7 +32,9 @@ public:
     glm::vec3 GetVelocity() const;
     float GetRadius() const;
     void SetIsWallCollision(bool a);
-    bool GetIsWallCollision();
+    bool GetIsWallCollision() const;
+    void SetIsCueBall(bool a);
+    bool GetIsCueBall() const;
 
 private:
     Model* model;
@@ -53,5 +55,6 @@ private:
     std::string color;
     bool isWallCollision; // ball:wall
     bool hasCollided; // ball:ball
+    bool isCueBall;
 };
 

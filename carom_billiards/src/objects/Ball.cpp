@@ -33,6 +33,13 @@ Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v, std::string color) : VAO(0)
 	this->isWallCollision = false;
 	this->hasCollided = false;
 
+	if (this->color == "white") {
+		this->isCueBall = true;
+	}
+	else {
+		this->isCueBall = false;
+	}
+
 	std::cout << "[Ball] Vertex Count: " << vCount << ", Face Count: " << fCount << std::endl;
 
 	if (model->normals == nullptr) {
@@ -258,7 +265,7 @@ void Ball::SetIsWallCollision(bool a) {
 	this->isWallCollision = a;
 }
 
-bool Ball::GetIsWallCollision() {
+bool Ball::GetIsWallCollision() const {
 	return this->isWallCollision;
 }
 
@@ -268,4 +275,11 @@ std::string Ball::GetColor() {
 
 glm::vec3 Ball::GetVelocity() const {
 	return this->velocity;
+}
+
+void Ball::SetIsCueBall(bool a) {
+	this->isCueBall = a;
+}
+bool Ball::GetIsCueBall() const {
+	return this->isCueBall;
 }
