@@ -37,6 +37,9 @@ public:
     void SetIsCueBall(bool a);
     bool GetIsCueBall() const;
 
+    void ApplyImpulse();
+    void ClearImpulse();
+
 private:
     Model* model;
     GLuint VAO, VBO_pos, VBO_nol, EBO;
@@ -50,6 +53,7 @@ private:
     glm::vec3 rotation;
     glm::vec3 scale;
     glm::vec3 velocity;
+    glm::vec3 pendingImpulse;
     glm::mat4 modelMat;
 
     std::string objectName;

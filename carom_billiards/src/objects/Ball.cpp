@@ -27,6 +27,7 @@ Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v, std::string color) : VAO(0)
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(1.0f);
 	this->velocity = v;
+	this->pendingImpulse = glm::vec3(0.0f);
 	this->modelMat = glm::mat4(1.0f);
 	this->objectName = "ball";
 	this->color = color;
@@ -180,8 +181,10 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 
 		glm::vec3 impulse = impulseScalar * normal;
 
-		this->velocity += impulse;
+		this->pendingImpulse += impulse;
 		this->prevPosition = this->position;
+		//this->velocity += impulse;
+		//this->prevPosition = this->position;
 
 		if (this->color == "red" && this->hasCollided == false) {
 			if (ball->GetColor() == gScore.cueBallColor) {
@@ -284,4 +287,12 @@ bool Ball::GetIsCueBall() const {
 
 void Ball::SetHasCollided(bool a) {
 	this->hasCollided = a;
+}
+
+void Ball::ApplyImpulse() {
+	this->velocity += this->pendingImpulse;
+}
+
+void Ball::ClearImpulse() {
+	this->pendingImpulse = glm::vec3(0.0f);
 }

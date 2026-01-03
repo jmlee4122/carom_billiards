@@ -125,6 +125,14 @@ void World::AddCollisionPair(const std::string& pairName, GameObject* a, GameObj
 
 void World::HandleCollisions() {
 	for (auto& pair : gPairs) {
+		if (pair.pairName == "ball:ball") {
+			for (GameObject* obj : pair.objects[0]) {
+				static_cast<Ball*>(obj)->ClearImpulse();
+			}
+		}
+	}
+
+	for (auto& pair : gPairs) {
 		std::string name = pair.pairName;
 
 		auto& groupA = pair.objects[0];
@@ -140,6 +148,14 @@ void World::HandleCollisions() {
 					a->HandleCollision(name, b);
 					b->HandleCollision(name, a);
 				}
+			}
+		}
+	}
+
+	for (auto& pair : gPairs) {
+		if (pair.pairName == "ball:ball") {
+			for (GameObject* obj : pair.objects[0]) {
+				static_cast<Ball*>(obj)->ApplyImpulse();
 			}
 		}
 	}
