@@ -17,6 +17,7 @@ public:
 	void UpdateMat();
 	void Update();
 	glm::mat4 GetViewMat() const;
+	glm::vec3 GetEye() const;
 
 private:
 	glm::vec3 eye;

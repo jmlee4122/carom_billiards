@@ -429,3 +429,21 @@ glm::vec3 GetCueBallPos() {
 	}
 	return glm::vec3(0, 0, 0);
 }
+
+glm::vec3 GetShootDir() {
+	glm::vec3 dir = glm::vec3(0, 0, 0);
+	for (const auto& r : world) {
+		if (r->GetObjectName() == "ball") {
+			Ball* ball = static_cast<Ball*>(r.get());
+			if (ball->GetColor() == gScore.cueBallColor) {
+				glm::vec3 cueBallPos = ball->GetPosition();
+				glm::vec3 cameraPos = cameraMain->GetEye();
+				dir = glm::normalize(cueBallPos - cameraPos);
+				dir.y = 0.0f;
+			}
+		}
+	}
+	std::cout << "==== [debug] cue ball's dir ====" << std::endl;
+	std::cout << "x : " << dir.x << " y : " << dir.y << " z : " << dir.z << std::endl;
+	return dir;
+}

@@ -61,7 +61,9 @@ void PlayMode::HandleKey(unsigned char key, int x, int y) {
 			if (r->GetObjectName() == "ball") {
 				Ball* ball = static_cast<Ball*>(r.get());
 				if (ball->GetColor() == gScore.cueBallColor) {
-					ball->SetVelocity(glm::vec3(50.0f * glm::vec3(-pixel_per_cm * 8.0, 0, pixel_per_cm * 1.3f)));
+					glm::vec3 dir = GetShootDir();
+					float speed = 400.0f * pixel_per_cm;
+					ball->SetVelocity(speed * dir);
 				}
 			}
 		}

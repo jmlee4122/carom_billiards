@@ -68,3 +68,7 @@ void CameraMain::Update() {
 glm::mat4 CameraMain::GetViewMat() const {
 	return this->viewMat;
 }
+
+glm::vec3 CameraMain::GetEye() const {
+	return this->eye;
+}

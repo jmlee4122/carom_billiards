@@ -28,3 +28,5 @@ void SetScore();
 void SetCueBall();
 
 glm::vec3 GetCueBallPos();
+
+glm::vec3 GetShootDir();
