@@ -12,6 +12,7 @@
 class GameObject;
 class GameMode;
 class Collider;
+class CameraMain;
 
 struct GameScore;
 struct CollisionInfo;
@@ -34,7 +35,7 @@ extern const unsigned int SHADOW_WIDTH, SHADOW_HEIGHT;
 extern glm::mat4 lightSpaceMatrix;
 
 extern glm::vec3 cameraPos;
-extern glm::mat4 gViewMat;
+extern glm::mat4 gSubViewMat;
 extern glm::mat4 gProjMat;
 
 // screen size
@@ -52,6 +53,8 @@ extern Light gLights[5];
 // game objects
 extern std::vector<std::shared_ptr<GameObject>> world;
 extern Collider* gCollider;
+// main camera
+extern CameraMain* cameraMain;
 
 // game mode stack
 extern std::vector<GameMode*> gModeStack;

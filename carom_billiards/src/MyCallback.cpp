@@ -18,6 +18,7 @@
 #include "play_mode.h"
 
 #include "./objects/GameObject.h"
+#include "./objects/CameraMain.h"
 
 GLvoid DrawScene() {
     static bool firstFrame = true;
@@ -72,7 +73,9 @@ GLvoid DrawScene() {
         1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
     // 카메라/투영 행렬 전송
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "view"), 1, GL_FALSE, glm::value_ptr(gViewMat));
+    glm::mat4 viewMat = cameraMain->GetViewMat();
+
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "view"), 1, GL_FALSE, glm::value_ptr(viewMat));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "projection"), 1, GL_FALSE, glm::value_ptr(gProjMat));
     glUniform3fv(glGetUniformLocation(shaderProgramID, "viewPos"), 1, glm::value_ptr(cameraPos));
 
@@ -118,6 +121,9 @@ GLvoid KeyboardUp(unsigned char key, int x, int y) {
 }
 
 GLvoid SpecialKey(int key, int x, int y) {
+    if (!gModeStack.empty()) {
+        gModeStack.back()->HandleEvents(key, x, y);
+    }
 	glutPostRedisplay();
 }
 

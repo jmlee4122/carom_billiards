@@ -12,6 +12,7 @@
 #include "./objects/Plane.h"
 #include "./objects/Ball.h"
 #include "./objects/Collider.h"
+#include "./objects/CameraMain.h"
 
 void PlayMode::Init() {
 	Model* m = new Model;
@@ -32,8 +33,6 @@ void PlayMode::Init() {
 	gCollider = new Collider(m);
 	gCollider->MakeWalls();
 
-	// PrintCollisionPairs();
-
 	// init global score
 	gScore.cueBallColor = "white";
 	gScore.whiteScore = 0;
@@ -43,6 +42,9 @@ void PlayMode::Init() {
 	gCollisionInfo.cntRed = 0;
 	gCollisionInfo.cntWhite = 0;
 	gCollisionInfo.cntYellow = 0;
+
+	cameraMain = new CameraMain();
+	cameraMain->SetAt();
 
 	gCurrTime = glutGet(GLUT_ELAPSED_TIME);
 }
@@ -73,7 +75,7 @@ void PlayMode::HandleEvents(unsigned char key, int x, int y) {
 void PlayMode::Update(float dt) {
 	World::Update(dt);
 	World::HandleCollisions();
-
+	cameraMain->Update();
 	SetScore();
 }
 

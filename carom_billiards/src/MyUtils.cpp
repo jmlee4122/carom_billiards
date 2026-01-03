@@ -21,6 +21,7 @@
 
 #include "./objects/GameObject.h"
 #include "./objects/Ball.h"
+#include "./objects/CameraMain.h"
 
 void read_newline(char* str) {
 	char* pos;
@@ -396,6 +397,7 @@ void SetScore() {
 		gCollisionInfo.cntYellow = 0;
 
 		SetCueBall();
+		cameraMain->SetAt();
 	}
 }
 
@@ -414,4 +416,16 @@ void SetCueBall() {
 			std::cout << " / # is cue ball : " << ball->GetIsCueBall() << std::endl;
 		}
 	}
+}
+
+glm::vec3 GetCueBallPos() {
+	for (const auto& r : world) {
+		if (r->GetObjectName() == "ball") {
+			Ball* ball = static_cast<Ball*>(r.get());
+			if (ball->GetColor() == gScore.cueBallColor) {
+				return ball->GetPosition();
+			}
+		}
+	}
+	return glm::vec3(0, 0, 0);
 }

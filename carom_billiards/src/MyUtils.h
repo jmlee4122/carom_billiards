@@ -2,6 +2,7 @@
 
 #include <gl/glew.h>
 #include <gl/freeglut.h>
+#include <gl/glm/glm.hpp>
 
 struct Model;
 struct Vertex;
@@ -25,3 +26,5 @@ bool IsNextTurn();
 void ChangeCueBallColor();
 void SetScore();
 void SetCueBall();
+
+glm::vec3 GetCueBallPos();

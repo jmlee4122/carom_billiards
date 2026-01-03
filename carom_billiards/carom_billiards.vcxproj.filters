@@ -48,6 +48,9 @@
     <ClCompile Include="src\objects\Plane.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="src\objects\CameraMain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MyCallback.h">
@@ -89,12 +92,14 @@
     <ClInclude Include="src\objects\Plane.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="src\objects\CameraMain.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\vertex.glsl" />
     <None Include="src\assets\shaders\fragment.glsl" />
     <None Include="src\assets\shaders\shadow_vertex.glsl" />
     <None Include="src\assets\shaders\shadow_fragment.glsl" />
-    <None Include="glsl src\assets\shaders\fragment.glsl" />
   </ItemGroup>
 </Project>

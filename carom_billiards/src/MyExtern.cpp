@@ -31,7 +31,7 @@ unsigned int SCR_HEIGHT = 600;
 
 glm::vec3 cameraPos(0.0f, 400.0f, 0.0f);
 
-glm::mat4 gViewMat = glm::lookAt(
+glm::mat4 gSubViewMat = glm::lookAt(
     cameraPos,
     glm::vec3(0.0f, 106.0f, 0.0f),
     glm::vec3(0.0f, 0.0f, -1.0f)
@@ -57,6 +57,7 @@ Light gLights[5] = {
 
 std::vector<std::shared_ptr<GameObject>> world;
 Collider* gCollider = nullptr;
+CameraMain* cameraMain = nullptr;
 
 std::vector<GameMode*> gModeStack;
 
