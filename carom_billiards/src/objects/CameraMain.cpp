@@ -16,26 +16,37 @@
 #include "../MyUtils.h"
 
 CameraMain::CameraMain() {
-	this->eye = glm::vec3(0, 0, 0);
-	this->at = glm::vec3(0, 106, 0);
-	this->dis = 300.0f * pixel_per_cm;
-	this->height = 50.0f * pixel_per_cm;
-	this->yaw = 0.0f;
-	this->pitch = 45.0f;
-	this->speed = 5.0f;
+	this->eye = glm::vec3(0, 0, 0), this->at = glm::vec3(0, 106, 0);
+	this->dis = 300.0f * pixel_per_cm, this->height = 50.0f * pixel_per_cm;
+	this->yaw = 0.0f, this->pitch = 45.0f;
+	this->speed = 0.5f;
 	this->viewMat = glm::mat4(1.0);
+	this->isLeft = false, this->isRight = false;
 }
 
 CameraMain::~CameraMain() {
 
 }
 
-void CameraMain::SetYaw(float a) {
-
-}
-
 void CameraMain::SetAt() {
 	this->at = GetCueBallPos();
+}
+
+void CameraMain::SetIsLeft(bool a) {
+	this->isLeft = a;
+}
+
+void CameraMain::SetIsRight(bool a) {
+	this->isRight = a;
+}
+
+void CameraMain::UpdateYaw() {
+	if (isLeft && !isRight) {
+		this->yaw -= this->speed;
+	}
+	else if (!isLeft && isRight) {
+		this->yaw += this->speed;
+	}
 }
 
 void CameraMain::UpdateEye() {
@@ -49,6 +60,7 @@ void CameraMain::UpdateMat() {
 }
 
 void CameraMain::Update() {
+	UpdateYaw();
 	UpdateEye();
 	UpdateMat();
 }

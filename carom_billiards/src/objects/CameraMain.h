@@ -9,8 +9,10 @@ class CameraMain
 public:
 	CameraMain();
 	~CameraMain();
-	void SetYaw(float a);
 	void SetAt();
+	void SetIsLeft(bool a);
+	void SetIsRight(bool a);
+	void UpdateYaw();
 	void UpdateEye();
 	void UpdateMat();
 	void Update();
@@ -23,5 +25,6 @@ private:
 	float yaw, pitch;
 	float speed;
 	glm::mat4 viewMat;
+	bool isLeft, isRight;
 };
 

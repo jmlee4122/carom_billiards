@@ -53,7 +53,7 @@ void PlayMode::Cleanup() {
 
 }
 
-void PlayMode::HandleEvents(unsigned char key, int x, int y) {
+void PlayMode::HandleKey(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'r':
 		gHasReady = false;
@@ -70,6 +70,28 @@ void PlayMode::HandleEvents(unsigned char key, int x, int y) {
 		glutLeaveMainLoop();
 	}
 	glutSwapBuffers();
+}
+
+void PlayMode::HandleSpecialKey(int key, int x, int y) {
+	switch (key) {
+	case GLUT_KEY_LEFT:
+		cameraMain->SetIsLeft(true);
+		break;
+	case GLUT_KEY_RIGHT:
+		cameraMain->SetIsRight(true);
+		break;
+	}
+}
+
+void PlayMode::HandleSpecialKeyUp(int key, int x, int y) {
+	switch (key) {
+	case GLUT_KEY_LEFT:
+		cameraMain->SetIsLeft(false);
+		break;
+	case GLUT_KEY_RIGHT:
+		cameraMain->SetIsRight(false);
+		break;
+	}
 }
 
 void PlayMode::Update(float dt) {

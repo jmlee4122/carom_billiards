@@ -111,7 +111,7 @@ GLvoid Reshape(int w, int h) {
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
     if (!gModeStack.empty()) {
-        gModeStack.back()->HandleEvents(key, x, y);
+        gModeStack.back()->HandleKey(key, x, y);
     }
     glutPostRedisplay();
 }
@@ -122,12 +122,15 @@ GLvoid KeyboardUp(unsigned char key, int x, int y) {
 
 GLvoid SpecialKey(int key, int x, int y) {
     if (!gModeStack.empty()) {
-        gModeStack.back()->HandleEvents(key, x, y);
+        gModeStack.back()->HandleSpecialKey(key, x, y);
     }
 	glutPostRedisplay();
 }
 
 GLvoid SpecialKeyUp(int key, int x, int y) {
+    if (!gModeStack.empty()) {
+        gModeStack.back()->HandleSpecialKeyUp(key, x, y);
+    }
 	glutPostRedisplay();
 }
 
