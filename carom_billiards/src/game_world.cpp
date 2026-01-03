@@ -145,6 +145,10 @@ void World::HandleCollisions() {
 				if (b == nullptr) continue;
 				if (a == b) continue;
 				if (World::CheckCollision(name, a, b)) {
+					if (name == "ball:ball") {
+						a->HandleCollision(name, b);
+						continue;
+					}
 					a->HandleCollision(name, b);
 					b->HandleCollision(name, a);
 				}
