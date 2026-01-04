@@ -71,3 +71,4 @@ GameScore gScore;
 CollisionInfo gCollisionInfo;
 
 bool gHasReady = true;
+float gShootPower = 0;

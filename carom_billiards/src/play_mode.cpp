@@ -55,8 +55,12 @@ void PlayMode::Cleanup() {
 }
 
 void PlayMode::HandleKey(unsigned char key, int x, int y) {
+	if ('1' <= key && key <= '9') {
+		float n = key - '0';
+		gShootPower = 10.0f * pixel_per_cm * n * n;
+	}
 	switch (key) {
-	case 'r':
+	case ' ':
 		if (!gHasReady) break;
 		gHasReady = false;
 		for (const auto& r : world) {
@@ -64,8 +68,7 @@ void PlayMode::HandleKey(unsigned char key, int x, int y) {
 				Ball* ball = static_cast<Ball*>(r.get());
 				if (ball->GetColor() == gScore.cueBallColor) {
 					glm::vec3 dir = GetShootDir();
-					float speed = 400.0f * pixel_per_cm;
-					ball->SetVelocity(speed * dir);
+					ball->SetVelocity(gShootPower * dir);
 				}
 			}
 		}

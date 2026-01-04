@@ -73,3 +73,4 @@ extern GameScore gScore;
 extern CollisionInfo gCollisionInfo;
 
 extern bool gHasReady;
+extern float gShootPower;
