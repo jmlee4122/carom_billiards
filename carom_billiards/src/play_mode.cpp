@@ -25,10 +25,11 @@ void PlayMode::Init() {
 
 	read_obj_file("./src/assets/models/billiard_ball.obj", m);
 	float dia = 244.0f / 8.0f;
-	World::AddObject(std::make_shared<Ball>(m, glm::vec3(-2 * dia, 110, 0), glm::vec3(0, 0, 0), "red"));
-	World::AddObject(std::make_shared<Ball>(m, glm::vec3(2 * dia, 110, 0), glm::vec3(0, 0, 0), "red"));
-	World::AddObject(std::make_shared<Ball>(m, glm::vec3(2 * dia, 110, -0.5 * dia), glm::vec3(0, 0, 0), "white"));
-	World::AddObject(std::make_shared<Ball>(m, glm::vec3(-3 * dia, 110, 0), glm::vec3(0, 0, 0), "yellow"));
+	float r = 3.275f;
+	World::AddObject(std::make_shared<Ball>(m, glm::vec3(-2 * dia, 106 + r, 0), glm::vec3(0, 0, 0), "red"));
+	World::AddObject(std::make_shared<Ball>(m, glm::vec3(2 * dia, 106 + r, 0), glm::vec3(0, 0, 0), "red"));
+	World::AddObject(std::make_shared<Ball>(m, glm::vec3(2 * dia, 106 + r, -0.5 * dia), glm::vec3(0, 0, 0), "white"));
+	World::AddObject(std::make_shared<Ball>(m, glm::vec3(-3 * dia, 106 + r, 0), glm::vec3(0, 0, 0), "yellow"));
 
 	read_obj_file("./src/assets/models/billiard_collider.obj", m);
 	gCollider = new Collider(m);

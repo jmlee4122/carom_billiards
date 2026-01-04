@@ -61,7 +61,7 @@ bool Framework::Initialize(int argc, char** argv) {
     // --- 윈도우 생성 (GLUT) ---
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowPosition(500, 500);
+    glutInitWindowPosition(200, 200);
     glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
     glutCreateWindow("Carom Billiards");
 

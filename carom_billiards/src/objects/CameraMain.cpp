@@ -19,7 +19,7 @@ CameraMain::CameraMain() {
 	this->eye = glm::vec3(0, 0, 0), this->at = glm::vec3(0, 106, 0);
 	this->dis = 300.0f * pixel_per_cm, this->height = 50.0f * pixel_per_cm;
 	this->yaw = 0.0f, this->pitch = 45.0f;
-	this->speed = 0.5f;
+	this->speed = 0.3f;
 	this->viewMat = glm::mat4(1.0);
 	this->isLeft = false, this->isRight = false;
 }

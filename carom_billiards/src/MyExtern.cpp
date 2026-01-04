@@ -26,8 +26,8 @@ const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 glm::mat4 lightSpaceMatrix;
 
 // screen size
-unsigned int SCR_WIDTH = 800;
-unsigned int SCR_HEIGHT = 600;
+unsigned int SCR_WIDTH = 1280;
+unsigned int SCR_HEIGHT = 720;
 
 glm::vec3 cameraPos(0.0f, 400.0f, 0.0f);
 

@@ -97,13 +97,13 @@ GLvoid DrawScene() {
 
     // Pass 3: mini map rendering
     int miniMapWidth = SCR_WIDTH / 3.0f;
-    int miniMapHeight = SCR_HEIGHT / 3.0f;
+    int miniMapHeight = miniMapWidth / 2.0f;
     glViewport(SCR_WIDTH - miniMapWidth, SCR_HEIGHT - miniMapHeight, miniMapWidth, miniMapHeight);
 
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    float orthoSize = 150.0f;
-    glm::mat4 miniMapProj = glm::ortho(-orthoSize, orthoSize, -orthoSize, orthoSize, 1.0f, 1000.0f);
+    float orthoSize = 200.0f;
+    glm::mat4 miniMapProj = glm::ortho(-orthoSize, orthoSize, -orthoSize / 2.0f, orthoSize / 2.0f, 1.0f, 1000.0f);
 
     glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "view"), 1, GL_FALSE, glm::value_ptr(gSubViewMat));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "projection"), 1, GL_FALSE, glm::value_ptr(miniMapProj));
