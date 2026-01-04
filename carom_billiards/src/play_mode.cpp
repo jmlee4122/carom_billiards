@@ -45,6 +45,10 @@ void PlayMode::Init() {
 	gCollisionInfo.cntWhite = 0;
 	gCollisionInfo.cntYellow = 0;
 
+	// init hit point
+	gHitPoint.x = 0.0f;
+	gHitPoint.y = 0.0f;
+
 	cameraMain = new CameraMain();
 	cameraMain->SetAt();
 

@@ -122,6 +122,23 @@ GLvoid DrawScene() {
         }
     }
 
+    // Pass 5: hit point rendering
+    int hitWidth = SCR_WIDTH / 3.0f;
+    int hitHeight = hitWidth / 2.0f;
+    float minX = SCR_WIDTH - miniMapWidth - hitWidth;
+    float minY = SCR_HEIGHT - miniMapHeight - hitHeight;
+
+    float centerX = ((minX)+(minX + hitWidth)) / 2.0f;
+    float centerY = ((minY)+(minY + hitHeight)) / 2.0f;
+    float hitPointX = centerX + gHitPoint.x;
+    float hitPointY = centerY + gHitPoint.y;
+
+    glViewport(minX, minY, hitWidth, hitHeight);
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+    
+
+
     glutSwapBuffers();
 }
 
