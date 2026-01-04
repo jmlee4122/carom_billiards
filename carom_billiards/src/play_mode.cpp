@@ -56,6 +56,7 @@ void PlayMode::Cleanup() {
 void PlayMode::HandleKey(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'r':
+		if (!gHasReady) break;
 		gHasReady = false;
 		for (const auto& r : world) {
 			if (r->GetObjectName() == "ball") {
@@ -77,10 +78,10 @@ void PlayMode::HandleKey(unsigned char key, int x, int y) {
 void PlayMode::HandleSpecialKey(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_LEFT:
-		cameraMain->SetIsLeft(true);
+		cameraMain->SetIsRight(true);
 		break;
 	case GLUT_KEY_RIGHT:
-		cameraMain->SetIsRight(true);
+		cameraMain->SetIsLeft(true);
 		break;
 	}
 }
@@ -88,10 +89,10 @@ void PlayMode::HandleSpecialKey(int key, int x, int y) {
 void PlayMode::HandleSpecialKeyUp(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_LEFT:
-		cameraMain->SetIsLeft(false);
+		cameraMain->SetIsRight(false);
 		break;
 	case GLUT_KEY_RIGHT:
-		cameraMain->SetIsRight(false);
+		cameraMain->SetIsLeft(false);
 		break;
 	}
 }
