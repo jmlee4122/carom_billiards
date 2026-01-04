@@ -114,6 +114,14 @@ GLvoid DrawScene() {
         }
     }
 
+    // Pass 4: UI rendering
+    if (!gModeStack.empty()) {
+        PlayMode* playMode = dynamic_cast<PlayMode*>(gModeStack.back());
+        if (playMode != nullptr) {
+            playMode->DrawUI();
+        }
+    }
+
     glutSwapBuffers();
 }
 
