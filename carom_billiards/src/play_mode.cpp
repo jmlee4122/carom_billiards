@@ -77,12 +77,12 @@ void PlayMode::HandleKey(unsigned char key, int x, int y) {
 					ball->SetVelocity(gShootPower * dir);
 
 					glm::vec2 hitPos = gCuePoint->GetPosition();
-					float spinFactor = 0.5f;
+					float spinFactor = 20.0f;
 
 					glm::vec3 sideSpinAxis = glm::vec3(0, 1, 0);
 					glm::vec3 topSpinAxis = glm::normalize(glm::cross(dir, sideSpinAxis));
 
-					glm::vec3 angularVel = sideSpinAxis * -hitPos.x * spinFactor + topSpinAxis * hitPos.y * spinFactor;
+					glm::vec3 angularVel = sideSpinAxis * -hitPos.x * spinFactor - topSpinAxis * hitPos.y * spinFactor;
 					ball->SetAngularVelocity(angularVel);
 				}
 			}
