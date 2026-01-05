@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="src\game_framework.cpp" />
     <ClCompile Include="src\objects\CameraMain.cpp" />
+    <ClCompile Include="src\objects\Circle.cpp" />
     <ClCompile Include="src\objects\Plane.cpp" />
     <ClCompile Include="src\play_mode.cpp" />
     <ClCompile Include="src\game_world.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="src\MyUtils.h" />
     <ClInclude Include="src\objects\Ball.h" />
     <ClInclude Include="src\objects\CameraMain.h" />
+    <ClInclude Include="src\objects\Circle.h" />
     <ClInclude Include="src\objects\Collider.h" />
     <ClInclude Include="src\objects\GameObject.h" />
     <ClInclude Include="src\objects\Plane.h" />
