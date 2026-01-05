@@ -16,7 +16,7 @@ Circle::Circle(float scale, glm::vec3 color) : VAO(0), VBO_pos(0), EBO(0) {
 	this->position = glm::vec2(0, 0);
 	this->radius = 0.0f;
 	this->isLeft = false, this->isRight = false, this->isUp = false, this->isDown = false;
-	this->speed = 0.1f;
+	this->speed = 0.5f;
 	
 	SetRadius(scale);
 }
@@ -26,28 +26,22 @@ Circle::~Circle() {
 }
 
 void Circle::DrawCircle(float x, float y) {
-	// 셰이더 비활성화
 	glUseProgram(0);
 
-	// 렌더링 설정
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
 
-	// 원 색상 설정
 	glColor3f(this->color.r, this->color.g, this->color.b);
 
-	// 원 그리기 (삼각형 팬 방식)
-	const int segments = 100; // 원의 부드러움 정도
+	const int segments = 100;
 	const float PI = 3.14159265f;
 	const float angleStep = 2.0f * PI / segments;
 
 	glBegin(GL_TRIANGLE_FAN);
 
-	// 중심점
 	glVertex2f(x, y);
 
-	// 원 둘레의 점들
 	for (int i = 0; i <= segments; ++i) {
 		float angle = i * angleStep;
 		float dx = this->radius * cosf(angle);
@@ -57,7 +51,6 @@ void Circle::DrawCircle(float x, float y) {
 
 	glEnd();
 
-	// 원래 상태로 복원
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 }
@@ -103,11 +96,11 @@ void Circle::UpdatePosition() {
 		this->position.x += this->speed;
 	}
 
-	if (isLeft && !isRight) {
-		this->position.y -= this->speed;
-	}
-	else if (!isLeft && isRight) {
+	if (isUp && !isDown) {
 		this->position.y += this->speed;
+	}
+	else if (!isUp && isDown) {
+		this->position.y -= this->speed;
 	}
 }
 
