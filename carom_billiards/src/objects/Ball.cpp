@@ -27,6 +27,7 @@ Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v, std::string color) : VAO(0)
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(1.0f);
 	this->velocity = v;
+	this->angularVelocity = glm::vec3(0.0f);
 	this->pendingImpulse = glm::vec3(0.0f);
 	this->modelMat = glm::mat4(1.0f);
 	this->objectName = "ball";
@@ -85,7 +86,12 @@ void Ball::UpdatePosition(float dt) {
 }
 
 void Ball::UpdateRotation(float dt) {
-
+	if (glm::length(this->angularVelocity) > 0.01f) {
+		glm::vec3 axis = glm::normalize(this->angularVelocity);
+		float angle = glm::length(this->angularVelocity) * dt;
+		this->rotation += axis * angle;
+	}
+	this->angularVelocity *= 0.99f;
 }
 
 void Ball::SetScale() {
@@ -99,8 +105,8 @@ void Ball::SetVelocity(glm::vec3 v) {
 void Ball::UpdateVelocity(float dt) {
 	float vSize = glm::length(this->velocity);
 	if (vSize <= 0.1f) {
-		this->velocity.x = 0.0f;
-		this->velocity.z = 0.0f;
+		this->velocity = glm::vec3(0.0f);
+		this->angularVelocity = glm::vec3(0.0f);
 		return;
 	}
 	this->velocity.x *= 0.995f;
@@ -109,7 +115,16 @@ void Ball::UpdateVelocity(float dt) {
 
 void Ball::UpdateModelMat(float dt) {
 	glm::mat4 transMat = glm::translate(glm::mat4(1.0), this->position);
-	this->modelMat = transMat;
+	
+	// 회전 적용
+	glm::mat4 rotMat = glm::mat4(1.0f);
+	if (glm::length(this->rotation) > 0.001f) {
+		rotMat = glm::rotate(rotMat, this->rotation.y, glm::vec3(0, 1, 0));
+		rotMat = glm::rotate(rotMat, this->rotation.x, glm::vec3(1, 0, 0));
+		rotMat = glm::rotate(rotMat, this->rotation.z, glm::vec3(0, 0, 1));
+	}
+
+	this->modelMat = transMat * rotMat;
 }
 
 void Ball::Update(float dt) {
@@ -213,10 +228,15 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 		for (auto& r : walls) {
 			if (r.isCollide) {
 				collisionNol = r.nol;
+				break;
 			}
 		}
 
 		if (glm::length(collisionNol) < 0.01f) return;
+
+		float sideSpin = this->angularVelocity.y;
+		glm::vec3 tangent = glm::normalize(glm::cross(collisionNol, glm::vec3(0, 1, 0)));
+		float spinFactor = 2.0f;
 
 		float minX = wall->GetMinX();
 		float maxX = wall->GetMaxX();
@@ -231,10 +251,9 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 				this->position.x = maxX - this->radius;
 			}
 			this->velocity.x *= -0.95f;
+			this->velocity.z += tangent.z * sideSpin * spinFactor;
 		}
 		else {
-			float centerZ = (minZ + maxZ) / 2.0f;
-			
 			if (collisionNol.z > 0) {
 				this->position.z = minZ + this->radius;
 			}
@@ -242,11 +261,11 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 				this->position.z = maxZ - this->radius;
 			}
 			this->velocity.z *= -0.95f;
+			this->velocity.x += tangent.x * sideSpin * spinFactor;
 		}
 		
 		this->prevPosition = this->position;
-
-		UpdateModelMat(0.0f);
+		this->angularVelocity.y *= 0.9f;
 	}
 }
 
@@ -295,4 +314,12 @@ void Ball::ApplyImpulse() {
 
 void Ball::ClearImpulse() {
 	this->pendingImpulse = glm::vec3(0.0f);
+}
+
+void Ball::SetAngularVelocity(glm::vec3 angVel) {
+	this->angularVelocity = angVel;
+}
+
+glm::vec3 Ball::GetAngularVelocity() const {
+	return this->angularVelocity;
 }
