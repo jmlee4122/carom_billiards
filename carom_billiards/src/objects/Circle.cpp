@@ -91,16 +91,28 @@ void Circle::SetIsDown(bool a) {
 void Circle::UpdatePosition() {
 	if (isLeft && !isRight) {
 		this->position.x -= this->speed;
+		float minX = -sqrt(80.0f * 80.0f - position.y * position.y);
+		float maxX = sqrt(80.0f * 80.0f - position.y * position.y);
+		this->position.x = glm::clamp(this->position.x , minX + this->radius, maxX - this->radius);
 	}
 	else if (!isLeft && isRight) {
 		this->position.x += this->speed;
+		float minX = -sqrt(80.0f * 80.0f - position.y * position.y);
+		float maxX = sqrt(80.0f * 80.0f - position.y * position.y);
+		this->position.x = glm::clamp(this->position.x, minX + this->radius, maxX - this->radius);
 	}
 
 	if (isUp && !isDown) {
 		this->position.y += this->speed;
+		float minY = -sqrt(80.0f * 80.0f - position.x * position.x);
+		float maxY = sqrt(80.0f * 80.0f - position.x * position.x);
+		this->position.y = glm::clamp(this->position.y, minY + this->radius, maxY - this->radius);
 	}
 	else if (!isUp && isDown) {
 		this->position.y -= this->speed;
+		float minY = -sqrt(80.0f * 80.0f - position.x * position.x);
+		float maxY = sqrt(80.0f * 80.0f - position.x * position.x);
+		this->position.y = glm::clamp(this->position.y, minY + this->radius, maxY - this->radius);
 	}
 }
 

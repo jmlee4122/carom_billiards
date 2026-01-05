@@ -17,6 +17,7 @@
 #include "./objects/Circle.h"
 
 void PlayMode::Init() {
+	this->isShiftPressed = false;
 	Model* m = new Model;
 	read_obj_file("./src/assets/models/billiard_table.obj", m);
 	World::AddObject(std::make_shared<Table>(m));
@@ -85,9 +86,12 @@ void PlayMode::HandleKey(unsigned char key, int x, int y) {
 }
 
 void PlayMode::HandleSpecialKey(int key, int x, int y) {
-	int modifiers = glutGetModifiers();
-	bool isShiftPressed = (modifiers & GLUT_ACTIVE_SHIFT) != 0;
-
+	if (key == GLUT_KEY_SHIFT_L) {
+		isShiftPressed = true;
+		cameraMain->SetIsLeft(false);
+		cameraMain->SetIsRight(false);
+	}
+	
 	if (isShiftPressed) {
 		switch (key) {
 		case GLUT_KEY_LEFT:
@@ -117,8 +121,13 @@ void PlayMode::HandleSpecialKey(int key, int x, int y) {
 }
 
 void PlayMode::HandleSpecialKeyUp(int key, int x, int y) {
-	int modifiers = glutGetModifiers();
-	bool isShiftPressed = (modifiers & GLUT_ACTIVE_SHIFT) != 0;
+	if (key == GLUT_KEY_SHIFT_L) {
+		isShiftPressed = false;
+		gCuePoint->SetIsLeft(false);
+		gCuePoint->SetIsRight(false);
+		gCuePoint->SetIsUp(false);
+		gCuePoint->SetIsDown(false);
+	}
 
 	if (isShiftPressed) {
 		switch (key) {

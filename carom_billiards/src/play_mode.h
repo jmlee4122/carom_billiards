@@ -17,4 +17,5 @@ public:
 
 private:
     void RenderText(float x, float y, const std::string& text, void* font);
+    bool isShiftPressed;
 };
