@@ -13,6 +13,7 @@ class GameObject;
 class GameMode;
 class Collider;
 class CameraMain;
+class Circle;
 
 struct GameScore;
 struct CollisionInfo;
@@ -55,6 +56,9 @@ extern std::vector<std::shared_ptr<GameObject>> world;
 extern Collider* gCollider;
 // main camera
 extern CameraMain* cameraMain;
+// cue point
+extern Circle* gBallSection;
+extern Circle* gCuePoint;
 
 // game mode stack
 extern std::vector<GameMode*> gModeStack;

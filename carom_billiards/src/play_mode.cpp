@@ -14,6 +14,7 @@
 #include "./objects/Ball.h"
 #include "./objects/Collider.h"
 #include "./objects/CameraMain.h"
+#include "./objects/Circle.h"
 
 void PlayMode::Init() {
 	Model* m = new Model;
@@ -47,6 +48,9 @@ void PlayMode::Init() {
 
 	cameraMain = new CameraMain();
 	cameraMain->SetAt();
+
+	gBallSection = new Circle(1.0f, glm::vec3(1, 1, 1));
+	gCuePoint = new Circle(0.2f, glm::vec3(1, 0, 0));
 
 	gCurrTime = glutGet(GLUT_ELAPSED_TIME);
 }

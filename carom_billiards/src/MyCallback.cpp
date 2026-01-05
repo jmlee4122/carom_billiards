@@ -19,6 +19,7 @@
 
 #include "./objects/GameObject.h"
 #include "./objects/CameraMain.h"
+#include "./objects/Circle.h"
 
 GLvoid DrawScene() {
     static bool firstFrame = true;
@@ -123,21 +124,29 @@ GLvoid DrawScene() {
     }
 
     // Pass 5: hit point rendering
-    int hitWidth = SCR_WIDTH / 3.0f;
-    int hitHeight = hitWidth / 2.0f;
+    int hitWidth = miniMapWidth;
+    int hitHeight = miniMapHeight;
     float minX = SCR_WIDTH - miniMapWidth - hitWidth;
-    float minY = SCR_HEIGHT - miniMapHeight - hitHeight;
+    float minY = SCR_HEIGHT - hitHeight;
 
     float centerX = ((minX)+(minX + hitWidth)) / 2.0f;
     float centerY = ((minY)+(minY + hitHeight)) / 2.0f;
-    float hitPointX = centerX + gHitPoint.x;
-    float hitPointY = centerY + gHitPoint.y;
+    float hitPointX = centerX + gCuePoint->GetPosition().x;
+    float hitPointY = centerY + gCuePoint->GetPosition().y;
 
     glViewport(minX, minY, hitWidth, hitHeight);
 
     glClear(GL_DEPTH_BUFFER_BIT);
-    
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(minX, minX + hitWidth, minY, minY + hitHeight);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    gBallSection->DrawCircle(centerX, centerY);
+    gCuePoint->DrawCircle(hitPointX, hitPointY);
 
     glutSwapBuffers();
 }

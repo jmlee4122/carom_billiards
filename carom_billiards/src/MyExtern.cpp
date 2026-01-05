@@ -58,6 +58,8 @@ Light gLights[5] = {
 std::vector<std::shared_ptr<GameObject>> world;
 Collider* gCollider = nullptr;
 CameraMain* cameraMain = nullptr;
+Circle* gBallSection = nullptr;
+Circle* gCuePoint = nullptr;
 
 std::vector<GameMode*> gModeStack;
 
