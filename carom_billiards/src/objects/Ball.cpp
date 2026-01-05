@@ -108,7 +108,7 @@ void Ball::SetVelocity(glm::vec3 v) {
 
 void Ball::UpdateVelocity(float dt) {
 	// 속도가 너무 작으면 정지 처리
-	if (glm::length(this->velocity) < 0.01f && glm::length(this->angularVelocity) < 0.1f) {
+	if (glm::length(this->velocity) < 0.01f && glm::length(this->angularVelocity) < 0.5f) {
 		this->velocity = glm::vec3(0.0f);
 		this->angularVelocity = glm::vec3(0.0f);
 		return;
@@ -117,50 +117,60 @@ void Ball::UpdateVelocity(float dt) {
 	// --- 물리 상수 설정 (게임 스케일에 맞춰 조절 필요) ---
 	const float GRAVITY = 980.0f; // 중력 가속도 (단위가 cm라면 980, m라면 9.8)
 	const float MU_SLIDE = 0.2f;  // 미끄러짐 마찰 계수 (오시/시끼가 먹는 정도)
-	const float MU_ROLL = 0.015f; // 구름 저항 계수 (자연스러운 감속)
+	const float MU_ROLL = 0.015f; // 구름 저항 계수 (0.03 → 0.015로 감소하여 끌림 효과 연장)
 
 	// 1. 접촉점(공의 맨 아래)의 속도 계산
-	// v_contact = v_center + (angularVelocity X radius_vector)
-	// radius_vector는 중심에서 바닥으로 향하는 벡터 (0, -radius, 0)
 	glm::vec3 rVec = glm::vec3(0, -this->radius, 0);
 	glm::vec3 slipVelocity = this->velocity + glm::cross(this->angularVelocity, rVec);
-	slipVelocity.y = 0.0f; // 바닥 평면에서의 미끄러짐만 고려
+	slipVelocity.y = 0.0f;
 
-	// 2. 미끄러짐(Sliding) 상태인지 확인
-	if (glm::length(slipVelocity) > 0.5f) {
+	// 2. 미끄러짐(Sliding) 상태인지 확인 (임계값 낮춤: 0.5 → 0.2)
+	float slipSpeed = glm::length(slipVelocity);
+
+	if (slipSpeed > 0.35f) {
 		// --- [미끄러짐 상태] : 오시/시끼가 작용하는 구간 ---
 
 		// 마찰력은 미끄러지는 방향의 반대
 		glm::vec3 frictionDir = -glm::normalize(slipVelocity);
 
-		// 마찰력 F = mu * m * g (여기서는 m=1로 가정하여 가속도 a = F)
+		// 마찰력 F = mu * m * g
 		glm::vec3 frictionAccel = frictionDir * MU_SLIDE * GRAVITY;
 
-		// 선속도 변화 (F = ma)
+		// 선속도 변화
 		this->velocity += frictionAccel * dt;
 
 		// 각속도 변화 (Torque = r X F, I = 2/5 * m * r^2)
-		// 각가속도 alpha = Torque / I
-		float I = 0.4f * this->radius * this->radius; // 관성 모멘트
-		glm::vec3 torque = glm::cross(rVec, frictionAccel * 1.0f); // Force * mass(1.0)
+		float I = 0.4f * this->radius * this->radius;
+		glm::vec3 torque = glm::cross(rVec, frictionAccel * 1.0f);
 		this->angularVelocity += (torque / I) * dt;
 
 	}
 	else {
-		// --- [구름(Rolling) 상태] : 자연스럽게 굴러가는 구간 ---
-
-		// 단순 구름 저항만 적용 (자연 감속)
+		// --- [구름(Rolling) 상태] ---
 		float speed = glm::length(this->velocity);
-		if (speed > 0) {
+		if (speed > 0.001f) {
 			glm::vec3 moveDir = glm::normalize(this->velocity);
 			glm::vec3 resistAccel = -moveDir * MU_ROLL * GRAVITY;
 			this->velocity += resistAccel * dt;
 
-			// 구름 상태에서는 각속도가 선속도에 동기화됨 (v = r * w)
-			// 굴러가는 축: 진행 방향의 수직
-			glm::vec3 rollAxis = glm::cross(glm::vec3(0, 1, 0), moveDir);
-			float omegaMag = speed / this->radius;
-			this->angularVelocity = rollAxis * omegaMag;
+			// 역방향 가속 방지
+			if (glm::dot(this->velocity, moveDir) < 0) {
+				this->velocity = glm::vec3(0.0f);
+				this->angularVelocity = glm::vec3(0.0f);
+			}
+			else {
+				// 구름 상태: 각속도를 선속도에 동기화
+				glm::vec3 rollAxis = glm::cross(glm::vec3(0, 1, 0), moveDir);
+				float omegaMag = glm::length(this->velocity) / this->radius;
+
+				// 기존 각속도와 부드럽게 보간 (급격한 변화 방지)
+				glm::vec3 targetAngularVel = rollAxis * omegaMag;
+				this->angularVelocity = glm::mix(this->angularVelocity, targetAngularVel, 0.3f);
+			}
+		}
+		else {
+			this->velocity = glm::vec3(0.0f);
+			this->angularVelocity = glm::vec3(0.0f);
 		}
 	}
 }
@@ -306,7 +316,7 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 		glm::vec3 tangent = glm::normalize(glm::cross(collisionNol, glm::vec3(0, 1, 0)));
 
 		// 쿠션에서의 스핀 반응성 (필요시 조절)
-		float spinFactor = 2.0f;
+		float spinFactor = 0.5f;
 
 		float minX = wall->GetMinX();
 		float maxX = wall->GetMaxX();
@@ -321,7 +331,7 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 			else {
 				this->position.x = maxX - this->radius;
 			}
-			this->velocity.x *= -0.95f; // 벽 반발 계수
+			this->velocity.x *= -0.85f; // 벽 반발 계수
 			// 스핀에 의한 반사각 변화 적용
 			this->velocity.z += tangent.z * sideSpin * spinFactor;
 		}
@@ -333,7 +343,7 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 			else {
 				this->position.z = maxZ - this->radius;
 			}
-			this->velocity.z *= -0.95f; // 벽 반발 계수
+			this->velocity.z *= -0.85f; // 벽 반발 계수
 			// 스핀에 의한 반사각 변화 적용
 			this->velocity.x += tangent.x * sideSpin * spinFactor;
 		}
@@ -341,7 +351,7 @@ void Ball::HandleCollision(std::string name, GameObject* other) {
 		this->prevPosition = this->position;
 
 		// 쿠션에 맞으면 회전이 약간 감소함
-		this->angularVelocity.y *= 0.9f;
+		this->angularVelocity.y *= 0.8f;
 	}
 }
 

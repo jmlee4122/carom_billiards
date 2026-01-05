@@ -317,7 +317,9 @@ bool IsNextTurn() {
 		for (const auto& r : world) {
 			if (r->GetObjectName() == "ball") {
 				Ball* ball = static_cast<Ball*>(r.get());
-				if (glm::length(ball->GetVelocity()) <= 0.001f) {
+				// 선속도와 각속도 모두 확인
+				if (glm::length(ball->GetVelocity()) <= 0.01f &&
+					glm::length(ball->GetAngularVelocity()) <= 0.5f) {
 					cntHasStopped++;
 				}
 			}

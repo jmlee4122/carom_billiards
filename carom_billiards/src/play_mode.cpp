@@ -77,12 +77,17 @@ void PlayMode::HandleKey(unsigned char key, int x, int y) {
 					ball->SetVelocity(gShootPower * dir);
 
 					glm::vec2 hitPos = gCuePoint->GetPosition();
-					float spinFactor = 20.0f;
+
+					// 스핀 강도를 파워에 비례하게 증가 (끌림 효과 강화)
+					float powerNormalized = glm::length(gShootPower * dir) / 100.0f; // 파워 정규화
+					float spinFactor = 0.8f + powerNormalized * 0.5f; // 기본 8, 최대 13 정도
 
 					glm::vec3 sideSpinAxis = glm::vec3(0, 1, 0);
 					glm::vec3 topSpinAxis = glm::normalize(glm::cross(dir, sideSpinAxis));
 
-					glm::vec3 angularVel = sideSpinAxis * -hitPos.x * spinFactor - topSpinAxis * hitPos.y * spinFactor;
+					// Y축 방향(위아래)에만 스핀 팩터를 강하게 적용
+					glm::vec3 angularVel = sideSpinAxis * -hitPos.x * spinFactor
+						- topSpinAxis * hitPos.y * spinFactor;
 					ball->SetAngularVelocity(angularVel);
 				}
 			}
