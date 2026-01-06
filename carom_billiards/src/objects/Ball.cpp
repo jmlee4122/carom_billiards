@@ -25,6 +25,7 @@ Ball::Ball(Model* model, glm::vec3 pos, glm::vec3 v, std::string color) : VAO(0)
 	this->position = pos;
 	this->prevPosition = this->position;
 	this->rotation = glm::vec3(0.0f);
+	this->rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 	this->scale = glm::vec3(1.0f);
 	this->velocity = v;
 	this->angularVelocity = glm::vec3(0.0f);
@@ -86,16 +87,24 @@ void Ball::UpdatePosition(float dt) {
 }
 
 void Ball::UpdateRotation(float dt) {
-    // 회전 적용 (단순히 현재 각속도만큼 회전각을 더함)
-    if (glm::length(this->angularVelocity) > 0.001f) {
-        glm::vec3 axis = glm::normalize(this->angularVelocity);
-        float angle = glm::length(this->angularVelocity) * dt;
-        
-        // GLM 쿼터니언이나 회전 행렬 누적을 권장하지만, 
-        // 기존 코드 스타일을 유지한다면 아래처럼 오일러 각에 더하는 방식 사용 (짐벌락 주의)
-        // 여기서는 기존 로직 유지하되 감속 코드만 제거함
-        this->rotation += axis * angle; 
-    }
+	// 각속도가 충분히 클 때만 회전 적용
+	if (glm::length(this->angularVelocity) > 0.001f) {
+		// 각속도 벡터에서 회전축과 회전 속도를 추출
+		glm::vec3 axis = glm::normalize(this->angularVelocity);
+		float angularSpeed = glm::length(this->angularVelocity);
+
+		// 이번 프레임의 회전 각도 (라디안)
+		float angle = angularSpeed * dt;
+
+		// 이번 프레임의 회전을 나타내는 쿼터니언 생성
+		glm::quat deltaRotation = glm::angleAxis(angle, axis);
+
+		// 기존 회전에 새 회전을 누적 (쿼터니언 곱셈)
+		this->rotationQuat = deltaRotation * this->rotationQuat;
+
+		// 쿼터니언 정규화 (누적 오차 방지)
+		this->rotationQuat = glm::normalize(this->rotationQuat);
+	}
 }
 
 void Ball::SetScale() {
@@ -177,14 +186,9 @@ void Ball::UpdateVelocity(float dt) {
 
 void Ball::UpdateModelMat(float dt) {
 	glm::mat4 transMat = glm::translate(glm::mat4(1.0), this->position);
-	
-	// 회전 적용
-	glm::mat4 rotMat = glm::mat4(1.0f);
-	if (glm::length(this->rotation) > 0.001f) {
-		rotMat = glm::rotate(rotMat, this->rotation.y, glm::vec3(0, 1, 0));
-		rotMat = glm::rotate(rotMat, this->rotation.x, glm::vec3(1, 0, 0));
-		rotMat = glm::rotate(rotMat, this->rotation.z, glm::vec3(0, 0, 1));
-	}
+
+	// 쿼터니언을 회전 행렬로 변환
+	glm::mat4 rotMat = glm::mat4_cast(this->rotationQuat);
 
 	this->modelMat = transMat * rotMat;
 }

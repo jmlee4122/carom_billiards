@@ -2,6 +2,7 @@
 
 #include <string>
 #include <gl/glm/glm.hpp>
+#include <gl/glm/gtc/quaternion.hpp>
 
 #include "GameObject.h"
 
@@ -63,6 +64,7 @@ private:
     glm::vec3 angularVelocity;
     glm::vec3 pendingImpulse;
     glm::mat4 modelMat;
+    glm::quat rotationQuat;
 
     std::string objectName;
     std::string color;
